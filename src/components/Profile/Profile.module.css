@@ -1,0 +1,39 @@
+.profile {
+  grid-area: content;
+  background-color: white;
+  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  border-radius: 10px;
+}
+
+.col {
+  position: relative;
+  /* width: 100%; */
+}
+
+.col:first-child {
+  width: 900px;
+  height: 200px;
+  border: 5px solid #515151;
+  margin: 1em 2em;
+  overflow: hidden;
+}
+
+.col:first-child img {
+  width: 900px;
+  height: 150%;
+}
+
+.col__other {
+  -ms-flex: 1 0 0;
+  flex: 1 0 0;
+  min-width: 300px;
+}
+
+.col img {
+  width: 900px;
+  height: 200px;
+}
