@@ -6,22 +6,24 @@
 
 .dialogs__items {
     margin: 10px 30px 30px 30px;
-    text-align: center;
 }
 
-.dialog {
+.dialog a {
     padding-top: 10px;
     padding-bottom: 10px;
     /* border-top: 2px solid #6767e0; */
     display: grid;
     grid-template-columns: 40px auto;
-    vertical-align: center;
     align-items: center;
 }
 
 .dialog img {
     height: 40px;
     border-radius: 50px;
+}
+
+.dialog span:last-child {
+    padding-left: 15px;
 }
 
 /* .dialog:last-child {

@@ -1,6 +1,7 @@
 import React from 'react'
 import classes from './Dialogs.module.css'
 import avatar from '../../img/avatar.jpg'
+import { NavLink } from 'react-router-dom'
 
 const Dialogs = () => {
     return (
@@ -8,13 +9,19 @@ const Dialogs = () => {
             <div className={classes.dialogs__items}>
                 <span>DIALOGS</span>
                 <div className={classes.dialog + ' ' + classes.active}>
-                    <span><img src={avatar}></img></span><span>Oleg</span>
+                    <NavLink to="/dialogs/1">
+                        <span><img src={avatar}></img></span><span>Oleg</span>
+                    </NavLink>
                 </div>
                 <div className={classes.dialog}>
-                    <span><img src={avatar}></img></span><span>Dima</span>
+                    <NavLink to="/dialogs/2">
+                        <span><img src={avatar}></img></span><span>Dima</span>
+                    </NavLink>
                 </div>
                 <div className={classes.dialog}>
-                    <span><img src={avatar}></img></span><span>Mariya</span>
+                    <NavLink to="/dialogs/3">
+                        <span><img src={avatar}></img></span><span>Mariya</span>
+                    </NavLink>
                 </div>
             </div>
             <span className={classes.border}></span>
