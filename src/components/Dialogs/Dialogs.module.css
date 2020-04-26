@@ -1,5 +1,51 @@
 .dialogs {
-    /* display: flex;
-    flex-wrap: wrap;
-    justify-content: center; */
+    display: grid;
+    grid-template-columns: 2fr 1px 10fr;
+    height: 100%;
+}
+
+.dialogs__items {
+    margin: 10px 30px 30px 30px;
+    text-align: center;
+}
+
+.dialog {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* border-top: 2px solid #6767e0; */
+    display: grid;
+    grid-template-columns: 40px auto;
+    vertical-align: center;
+    align-items: center;
+}
+
+.dialog img {
+    height: 40px;
+    border-radius: 50px;
+}
+
+/* .dialog:last-child {
+    border-bottom: 2px solid #6767e0;
+} */
+
+/* Можно и вовсе убрать border у диалогов */
+
+.dialog.active {
+    color: gold;
+}
+
+.border {
+    border-right: 1px solid #6767e0;
+    border-left: 1px solid #6767e0;
+    margin: 31.6px 0 30px 0;
+    border-radius: 10px;
+}
+
+
+.messages {
+    padding: 31.6px 10px 30px 30px;
+}
+
+.message {
+    
 }
