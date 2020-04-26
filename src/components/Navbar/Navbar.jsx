@@ -6,40 +6,40 @@ const Navbar = () => {
         <nav className={classes.nav}>
             <div>
                 <div className={classes.nav__item}>
-                    <a href="#">
-                        <i class="fa fa-home" aria-hidden="true"></i>
+                    <a href="/profile">
+                        <i className="fa fa-home" aria-hidden="true"></i>
                         <div className={`${classes.navbar_button_text} ${classes.nav_button_text}`}>
                             Profile
                         </div>
                     </a>
                 </div>
                 <div className={classes.nav__item}>
-                    <a href="#">
-                        <i class="fa fa-comments" aria-hidden="true"></i>
+                    <a href="/dialogs">
+                        <i className="fa fa-comments" aria-hidden="true"></i>
                         <div className={`${classes.navbar_button_text} ${classes.nav_button_text}`}>
                             Messages
                         </div>
                     </a>
                 </div>
                 <div className={classes.nav__item}>
-                    <a href="#">
-                        <i class="fa fa-file-text" aria-hidden="true"></i>
+                    <a href="/news">
+                        <i className="fa fa-file-text" aria-hidden="true"></i>
                         <div className={`${classes.navbar_button_text} ${classes.nav_button_text}`}>
                             News
                         </div>
                     </a>
                 </div>
                 <div className={classes.nav__item}>
-                    <a href="#">
-                        <i class="fa fa-music" aria-hidden="true"></i>
+                    <a href="/music">
+                        <i className="fa fa-music" aria-hidden="true"></i>
                         <div className={`${classes.navbar_button_text} ${classes.nav_button_text}`}>
                             Music
                         </div>
                     </a>
                 </div>
                 <div className={classes.nav__item}>
-                    <a href="#">
-                        <i class="fa fa-cog" aria-hidden="true"></i>
+                    <a href="/settings">
+                        <i className="fa fa-cog" aria-hidden="true"></i>
                         <div className={`${classes.navbar_button_text} ${classes.nav_button_text}`}>
                             Settings
                         </div>

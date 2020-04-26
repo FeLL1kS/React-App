@@ -12,7 +12,7 @@ const Profile = () => {
             <div className={classes.col__other}>
                 ava + description
             </div>
-            <MyPosts />
+            <MyPosts col__other={classes.col__other}/>
         </div>
     )
 }
