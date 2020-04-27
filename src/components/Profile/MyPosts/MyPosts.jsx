@@ -4,7 +4,7 @@ import Post from './Post/Post'
 const MyPost = (props) => {
     return (
         <div className={props.col__other}>
-            My posts
+            <span>My posts</span>
             <div>
                 <textarea></textarea>
                 <button>Add</button>

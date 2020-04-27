@@ -10,7 +10,6 @@
 }
 
 .col:first-child {
-  width: 900px;
   height: 200px;
   border: 5px solid #515151;
   margin: 1em 2em;
@@ -23,12 +22,8 @@
 }
 
 .col__other {
-  -ms-flex: 1 0 0;
+  -ms-flex: 1 0 0;  
   flex: 1 0 0;
   min-width: 300px;
-}
-
-.col img {
-  width: 900px;
-  height: 200px;
+  padding: 1em;
 }

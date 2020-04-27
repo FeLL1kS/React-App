@@ -1,51 +1,29 @@
-import React from 'react'
+import React, { Profiler } from 'react'
 import classes from './Navbar.module.css'
 import { NavLink } from 'react-router-dom';
+
+const NavItem = (props) => {
+    return (
+        <div className={classes.nav__item}>
+            <NavLink to={props.to.toLowerCase()} activeClassName={classes.active}>
+                <i className={"fa " + props.icon} aria-hidden="true"></i>
+                <div className={`${classes.navbar_button_text} ${classes.nav_button_text}`}>
+                    {props.to}
+            </div>
+            </NavLink>
+        </div>
+    )
+}
 
 const Navbar = () => {
     return (
         <nav className={classes.nav}>
             <div>
-                <div className={classes.nav__item}>
-                    <NavLink to="/profile" activeClassName={classes.active}>
-                        <i className="fa fa-home" aria-hidden="true"></i>
-                        <div className={`${classes.navbar_button_text} ${classes.nav_button_text}`}>
-                            Profile
-                        </div>
-                    </NavLink>
-                </div>
-                <div className={classes.nav__item}>
-                    <NavLink to="/dialogs" activeClassName={classes.active}>
-                        <i className="fa fa-comments" aria-hidden="true"></i>
-                        <div className={`${classes.navbar_button_text} ${classes.nav_button_text}`}>
-                            Messages
-                        </div>
-                    </NavLink>
-                </div>
-                <div className={classes.nav__item}>
-                    <NavLink to="/news" activeClassName={classes.active}>
-                        <i className="fa fa-file-text" aria-hidden="true"></i>
-                        <div className={`${classes.navbar_button_text} ${classes.nav_button_text}`}>
-                            News
-                        </div>
-                    </NavLink>
-                </div>
-                <div className={classes.nav__item}>
-                    <NavLink to="/music" activeClassName={classes.active}>
-                        <i className="fa fa-music" aria-hidden="true"></i>
-                        <div className={`${classes.navbar_button_text} ${classes.nav_button_text}`}>
-                            Music
-                        </div>
-                    </NavLink>
-                </div>
-                <div className={classes.nav__item}>
-                    <NavLink to="/settings" activeClassName={classes.active}>
-                        <i className="fa fa-cog" aria-hidden="true"></i>
-                        <div className={`${classes.navbar_button_text} ${classes.nav_button_text}`}>
-                            Settings
-                        </div>
-                    </NavLink>
-                </div>
+                <NavItem to = "Profile" icon = "fa-home"/>
+                <NavItem to = "Dialogs" icon = "fa-comments"/>
+                <NavItem to = "News" icon = "fa-file-text"/>
+                <NavItem to = "Music" icon = "fa-music"/>
+                <NavItem to = "Settings" icon = "fa-cog"/>
             </div>
         </nav>
     )

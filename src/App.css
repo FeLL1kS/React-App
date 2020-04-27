@@ -18,3 +18,16 @@
   border-radius: 10px;
   height: 100%;
 }
+
+textarea {
+  /* display:block; */
+  resize: none;
+  /* margin:0 auto;
+  outline:none;
+  border-width:2px;
+  border-radius:2px;
+  font-size:18pt;
+  text-align:center;
+  background:#ecf0f1;
+  color:rgb(52, 73, 94); */
+}
