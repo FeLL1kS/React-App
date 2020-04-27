@@ -19,6 +19,10 @@
     font-size: 18px;
 }
 
+a.active {
+    font-size: 20px;
+}
+
 .dialog img {
     height: 40px;
     border-radius: 50px;
@@ -26,10 +30,6 @@
 
 .dialog span:last-child {
     padding-left: 15px;
-}
-
-.dialog.active {
-    color: gold;
 }
 
 .border {

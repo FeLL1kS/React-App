@@ -29,6 +29,10 @@
   text-decoration: none;
 }
 
-.nav__item a.active {
-  color: gold;
+.nav__item a.active  {
+  font-size: 20px;
+}
+
+.nav div {
+  width: 100px;
 }
