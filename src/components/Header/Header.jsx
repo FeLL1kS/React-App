@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 const Header = () => {
     return (
         <header className={classes.header}>
-            <NavLink to='/profile'><img src={logo} /></NavLink>
+            <NavLink to='/profile'><img src={logo} alt="logo" /></NavLink>
         </header>
     )
 }
