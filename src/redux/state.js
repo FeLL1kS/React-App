@@ -1,4 +1,5 @@
 import avatar from '../img/avatar.jpg'
+import { rerenderEntireTree } from '../render'
 
 let state = {
     profilePage: {
@@ -23,6 +24,16 @@ let state = {
         { id: '4', message: 'Me too', from: 'im', avatar: {avatar} },
         ]
     }
+}
+
+export const addPost = (postMessage) => {
+    let newPost = {
+        id: 5,
+        message: postMessage,
+        countLikes: 0
+    }
+    state.profilePage.postsData.push(newPost)
+    rerenderEntireTree(state);
 }
 
 export default state;

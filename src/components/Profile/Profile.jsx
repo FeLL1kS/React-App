@@ -13,7 +13,7 @@ const Profile = (props) => {
             <div className={classes.col__other}>
                 ava + description
             </div>
-            <MyPosts col__other={classes.col__other} postsData={props.state.postsData}/>
+            <MyPosts col__other={classes.col__other} postsData={props.state.postsData} addPost={props.addPost}/>
         </div>
     )
 }
