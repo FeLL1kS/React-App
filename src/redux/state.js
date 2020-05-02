@@ -27,55 +27,54 @@ let store = {
             newMessageText: ''
         }
     },
-    getPostsData() {
-        return this._state.profilePage.postsData
-    },
-    getNewPostText() {
-        return this._state.profilePage.newPostText
-    },
-    addPost() {
-        let newPost = {
-            id: 5,
-            message: this._state.profilePage.newPostText,
-            countLikes: 0
-        }
-        this._state.profilePage.postsData.push(newPost)
-        this._state.profilePage.newPostText = ''
-        this._callSubscriber(this);
-    },
-    updateNewPostText(newText) {
-        this._state.profilePage.newPostText = newText
-        this._callSubscriber(this);
-    },
-    getNewMessageText() {
-        return this._state.dialogsPage.newMessageText
-    },
-    getMessagesData() {
-        return this._state.dialogsPage.messagesData
-    },
-    getDialogsData() {
-        return this._state.dialogsPage.dialogsData
-    },
-    sendMessage() {
-        let newMessage = {
-            id: '5',
-            message: this._state.dialogsPage.newMessageText,
-            from: 'im',
-            avatar: {avatar}
-        }
-        this._state.dialogsPage.messagesData.push(newMessage)
-        this._state.dialogsPage.newMessageText = ''
-        this._callSubscriber(this)
-    },
-    updateNewMessageText(newText) {
-        this._state.dialogsPage.newMessageText = newText
-        this._callSubscriber(this)
-    },
     _callSubscriber() {
         console.log('State is changed')
     },
+
     subscribe(observer) {
         this._callSubscriber = observer // pattern observer
+    },
+    
+    getState() {
+        return this._state
+    },
+
+    dispatch(action) {
+        switch(action.type)
+        {
+            case('ADD-POST'):
+                let newPost = {
+                    id: 5,
+                    message: this._state.profilePage.newPostText,
+                    countLikes: 0
+                }
+                this._state.profilePage.postsData.push(newPost)
+                this._state.profilePage.newPostText = ''
+                this._callSubscriber(this._state);
+                break;
+            case('UPDATE-NEW-POST-TEXT'):
+                this._state.profilePage.newPostText = action.newText
+                this._callSubscriber(this._state);
+                break;
+            case('SEND-MESSAGE'):
+                let newMessage = {
+                    id: '5',
+                    message: this._state.dialogsPage.newMessageText,
+                    from: 'im',
+                    avatar: {avatar}
+                }
+                this._state.dialogsPage.messagesData.push(newMessage)
+                this._state.dialogsPage.newMessageText = ''
+                this._callSubscriber(this._state)
+                break;
+            case('UPDATE-NEW-MESSAGE-TEXT'):
+                this._state.dialogsPage.newMessageText = action.newText
+                this._callSubscriber(this._state)
+                break;
+            default:
+                console.log('THERE ARE NO ACTION-TYPE LIKE ' + action.type)
+                break;
+        }
     }
 }
 

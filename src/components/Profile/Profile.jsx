@@ -4,7 +4,6 @@ import classes from './Profile.module.css'
 import MyPosts from './MyPosts/MyPosts'
 
 const Profile = (props) => {
-
     return (
         <div className={classes.profile}>
             <div className={classes.col}>
@@ -13,7 +12,7 @@ const Profile = (props) => {
             <div className={classes.col__other}>
                 ava + description
             </div>
-            <MyPosts col__other={classes.col__other} store={props.store}/>
+            <MyPosts col__other={classes.col__other} profilePage={props.profilePage} dispatch={props.dispatch}/>
         </div>
     )
 }
