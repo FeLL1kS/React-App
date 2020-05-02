@@ -1,5 +1,8 @@
 import avatar from '../img/avatar.jpg'
-import { rerenderEntireTree } from '../render'
+
+let rerenderEntireTree = () => {
+    console.log('State is changed')
+}
 
 let state = {
     profilePage: {
@@ -19,11 +22,12 @@ let state = {
         { id: '4', name: 'Valentine Vojtovich', avatar: { avatar } },
         ],
         messagesData: [
-        { id: '1', message: 'Hi', from: 'im', avatar: {avatar} },
-        { id: '2', message: 'How are you?', from: 'im', avatar: {avatar} },
-        { id: '3', message: 'I\'m fine, and you?', from: 'partner', avatar: {avatar} },
-        { id: '4', message: 'Me too', from: 'im', avatar: {avatar} },
-        ]
+        { id: '1', message: 'Hi', from: 'im', name: 'Oleg Vojtovich', avatar: {avatar} },
+        { id: '2', message: 'How are you?', from: 'im', name: 'Oleg Vojtovich', avatar: {avatar} },
+        { id: '3', message: 'I\'m fine, and you?', from: 'comp', name: 'Dima Vojtovich', avatar: {avatar} },
+        { id: '4', message: 'Me too', from: 'im', name: 'Oleg Vojtovich', avatar: {avatar} },
+        ],
+        newMessageText: ''
     }
 }
 
@@ -41,7 +45,27 @@ export const addPost = (postMessage) => {
 export const updateNewPostText = (newText) => {
     state.profilePage.newPostText = newText
     rerenderEntireTree(state);
-    console.log(state)
+}
+
+export const sendMessage = (messageText) => {
+    let newMessage = {
+        id: '5',
+        message: messageText,
+        from: 'im',
+        avatar: {avatar}
+    }
+    state.dialogsPage.messagesData.push(newMessage)
+    state.dialogsPage.newMessageText = ''
+    rerenderEntireTree(state)
+}
+
+export const updateNewMessageText = (newText) => {
+    state.dialogsPage.newMessageText = newText
+    rerenderEntireTree(state)
+}
+
+export const subscribe = observer => {
+    rerenderEntireTree = observer // pattern observer
 }
 
 export default state;

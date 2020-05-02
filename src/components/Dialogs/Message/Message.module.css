@@ -2,3 +2,21 @@
     height: 40px;
     border-radius: 50px;
 }
+
+.message {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: grid;
+    gap: 15px;
+    align-items: center;
+}
+
+.immessage {
+    text-align: end;
+    grid-template-columns: auto 40px;
+}
+
+.compmessage {
+    text-align: start;
+    grid-template-columns: 40px auto;
+}

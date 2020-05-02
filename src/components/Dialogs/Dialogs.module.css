@@ -24,3 +24,12 @@
     width: 100%;
     text-align: center;
 }
+
+.messageBox textarea {
+    width: 100%;
+}
+
+.messageBox button {
+    float: right;
+    width: 100px;
+}

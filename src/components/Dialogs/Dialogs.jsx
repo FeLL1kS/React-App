@@ -8,7 +8,12 @@ const Dialogs = (props) => {
    
     const addPost = () => {
         let text = newPostElement.current.value
-        alert(text)
+        props.sendMessage(text)
+    }
+
+    const handleInputChange = e => {
+        const value = e.target.value
+        props.updateNewMessageText(value)
     }
 
     return (
@@ -20,9 +25,9 @@ const Dialogs = (props) => {
             <span className={classes.border}></span>
             <div className={classes.messages}>
                 {props.state.messagesData.map(message => <Message message={message} />)}
-                <div>
-                    <textarea ref={newPostElement} style={{width:'100%'}}></textarea>
-                    <button onClick={addPost} style={{float: 'right'}}>Add</button>
+                <div className={classes.messageBox}>
+                    <textarea ref={newPostElement} value={props.state.newMessageText} onChange={handleInputChange}></textarea>
+                    <button onClick={addPost}>Add</button>
                 </div>
             </div>
         </div>
