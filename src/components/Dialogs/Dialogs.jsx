@@ -7,26 +7,25 @@ const Dialogs = (props) => {
     const newPostElement = React.createRef();
    
     const addPost = () => {
-        let text = newPostElement.current.value
-        props.sendMessage(text)
+        props.store.sendMessage()
     }
 
     const handleInputChange = e => {
         const value = e.target.value
-        props.updateNewMessageText(value)
+        props.store.updateNewMessageText(value)
     }
 
     return (
         <div className={classes.dialogs}>
             <div className={classes.dialogs__items}>
                 <span className={classes.header}>DIALOGS</span>
-                {props.state.dialogsData.map(dialog => <DialogItem name={dialog.name} id={dialog.id} avatar={dialog.avatar.avatar} />)}
+                {props.store.getDialogsData().map(dialog => <DialogItem name={dialog.name} id={dialog.id} avatar={dialog.avatar.avatar} />)}
             </div>
             <span className={classes.border}></span>
             <div className={classes.messages}>
-                {props.state.messagesData.map(message => <Message message={message} />)}
+                {props.store.getMessagesData().map(message => <Message message={message} />)}
                 <div className={classes.messageBox}>
-                    <textarea ref={newPostElement} value={props.state.newMessageText} onChange={handleInputChange}></textarea>
+                    <textarea ref={newPostElement} value={props.store.getNewMessageText()} onChange={handleInputChange}></textarea>
                     <button onClick={addPost}>Add</button>
                 </div>
             </div>
