@@ -1,5 +1,10 @@
 import avatar from '../img/avatar.jpg'
 
+const ADD_POST = 'ADD-POST'
+const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT'
+const SEND_MESSAGE = 'SEND-MESSAGE'
+const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE-NEW-MESSAGE-TEXT'
+
 let store = {
     _state: {
         profilePage: {
@@ -42,7 +47,7 @@ let store = {
     dispatch(action) {
         switch(action.type)
         {
-            case('ADD-POST'):
+            case(ADD_POST):
                 let newPost = {
                     id: 5,
                     message: this._state.profilePage.newPostText,
@@ -52,11 +57,11 @@ let store = {
                 this._state.profilePage.newPostText = ''
                 this._callSubscriber(this._state);
                 break;
-            case('UPDATE-NEW-POST-TEXT'):
+            case(UPDATE_NEW_POST_TEXT):
                 this._state.profilePage.newPostText = action.newText
                 this._callSubscriber(this._state);
                 break;
-            case('SEND-MESSAGE'):
+            case(SEND_MESSAGE):
                 let newMessage = {
                     id: '5',
                     message: this._state.dialogsPage.newMessageText,
@@ -67,7 +72,7 @@ let store = {
                 this._state.dialogsPage.newMessageText = ''
                 this._callSubscriber(this._state)
                 break;
-            case('UPDATE-NEW-MESSAGE-TEXT'):
+            case(UPDATE_NEW_MESSAGE_TEXT):
                 this._state.dialogsPage.newMessageText = action.newText
                 this._callSubscriber(this._state)
                 break;
@@ -77,5 +82,13 @@ let store = {
         }
     }
 }
+
+export const addPostActionCreator = () => ({ type: ADD_POST })
+
+export const updateNewPostTextActionCreator = (value) => ({ type: UPDATE_NEW_POST_TEXT, newText: value })
+
+export const sendMessageActionCreator = () => ({ type: SEND_MESSAGE })
+
+export const updateNewMessageTextActionCreator = (value) => ({ type: UPDATE_NEW_MESSAGE_TEXT, newText: value })
 
 export default store;
