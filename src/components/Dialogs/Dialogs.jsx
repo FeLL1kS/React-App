@@ -2,18 +2,18 @@ import React from 'react'
 import classes from './Dialogs.module.css'
 import DialogItem from './DialogItem/DialogItem'
 import Message from './Message/Message'
-import { updateNewMessageTextActionCreator, sendMessageActionCreator } from '../../redux/state'
+import { updateNewMessageTextCreator, sendMessageCreator } from '../../redux/dialogsReducer'
 
 const Dialogs = (props) => {
     const newPostElement = React.createRef();
 
     const sendMessage = () => {
-        props.dispatch(sendMessageActionCreator())
+        props.dispatch(sendMessageCreator())
     }
 
     const handleInputChange = e => {
         const value = e.target.value
-        props.dispatch(updateNewMessageTextActionCreator(value))
+        props.dispatch(updateNewMessageTextCreator(value))
     }
 
 debugger
@@ -27,7 +27,7 @@ debugger
             <div className={classes.messages}>
                 {props.dialogsPage.messagesData.map(message => <Message message={message} />)}
                 <div className={classes.messageBox}>
-                    <textarea ref={newPostElement} value={props.dialogsPage.newMessageText} onChange={handleInputChange}></textarea>
+                    <textarea placeholder="Enter your message" ref={newPostElement} value={props.dialogsPage.newMessageText} onChange={handleInputChange}></textarea>
                     <button onClick={sendMessage}>Add</button>
                 </div>
             </div>

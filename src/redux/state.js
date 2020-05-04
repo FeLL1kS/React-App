@@ -1,9 +1,6 @@
 import avatar from '../img/avatar.jpg'
-
-const ADD_POST = 'ADD-POST'
-const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT'
-const SEND_MESSAGE = 'SEND-MESSAGE'
-const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE-NEW-MESSAGE-TEXT'
+import profileReducer from './profileReducer'
+import dialogsReducers from './dialogsReducer'
 
 let store = {
     _state: {
@@ -14,7 +11,7 @@ let store = {
                 { id: '3', message: 'Haha', countLikes: '24' },
                 { id: '4', message: 'Hello', countLikes: '43' },
             ],
-            newPostText: 'Type your post...'   
+            newPostText: ''   
         },
         dialogsPage: {
             dialogsData: [
@@ -45,50 +42,10 @@ let store = {
     },
 
     dispatch(action) {
-        switch(action.type)
-        {
-            case(ADD_POST):
-                let newPost = {
-                    id: 5,
-                    message: this._state.profilePage.newPostText,
-                    countLikes: 0
-                }
-                this._state.profilePage.postsData.push(newPost)
-                this._state.profilePage.newPostText = ''
-                this._callSubscriber(this._state);
-                break;
-            case(UPDATE_NEW_POST_TEXT):
-                this._state.profilePage.newPostText = action.newText
-                this._callSubscriber(this._state);
-                break;
-            case(SEND_MESSAGE):
-                let newMessage = {
-                    id: '5',
-                    message: this._state.dialogsPage.newMessageText,
-                    from: 'im',
-                    avatar: {avatar}
-                }
-                this._state.dialogsPage.messagesData.push(newMessage)
-                this._state.dialogsPage.newMessageText = ''
-                this._callSubscriber(this._state)
-                break;
-            case(UPDATE_NEW_MESSAGE_TEXT):
-                this._state.dialogsPage.newMessageText = action.newText
-                this._callSubscriber(this._state)
-                break;
-            default:
-                console.log('THERE ARE NO ACTION-TYPE LIKE ' + action.type)
-                break;
-        }
+        this._state.profilePage = profileReducer(this._state.profilePage, action)
+        this._state.dialogsPage = dialogsReducers(this._state.dialogsPage, action)
+        this._callSubscriber(this._state)
     }
 }
-
-export const addPostActionCreator = () => ({ type: ADD_POST })
-
-export const updateNewPostTextActionCreator = (value) => ({ type: UPDATE_NEW_POST_TEXT, newText: value })
-
-export const sendMessageActionCreator = () => ({ type: SEND_MESSAGE })
-
-export const updateNewMessageTextActionCreator = (value) => ({ type: UPDATE_NEW_MESSAGE_TEXT, newText: value })
 
 export default store;
