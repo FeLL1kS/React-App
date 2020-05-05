@@ -1,19 +1,19 @@
 import React from 'react'
 import Post from './Post/Post'
 import classes from './MyPosts.module.css';
-import { updateNewPostTextCreator, addPostCreator } from '../../../redux/profileReducer';
 
 const MyPost = (props) => {
     const newPostElement = React.createRef();
    
     const addPost = () => {
-        props.dispatch(addPostCreator())
+        props.addPost()
     }
 
     const handleInputChange = e => {
         const value = e.target.value
-        props.dispatch(updateNewPostTextCreator(value))
+        props.updateNewPostText(value)
     }
+    
     return (
         <div className={props.col__other}>
             <span>My posts</span>

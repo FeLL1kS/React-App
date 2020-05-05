@@ -2,21 +2,19 @@ import React from 'react'
 import classes from './Dialogs.module.css'
 import DialogItem from './DialogItem/DialogItem'
 import Message from './Message/Message'
-import { updateNewMessageTextCreator, sendMessageCreator } from '../../redux/dialogsReducer'
 
 const Dialogs = (props) => {
     const newPostElement = React.createRef();
 
     const sendMessage = () => {
-        props.dispatch(sendMessageCreator())
+        props.sendMessage()
     }
 
     const handleInputChange = e => {
         const value = e.target.value
-        props.dispatch(updateNewMessageTextCreator(value))
+        props.updateNewMessageText(value)
     }
 
-debugger
     return (
         <div className={classes.dialogs}>
             <div className={classes.dialogs__items}>

@@ -7,8 +7,9 @@ const Message = (props) => {
     {
         return (
             <div className={classes.message + ' ' + classes.immessage} >
-                <span>{props.message.message}</span>
-                <span><img src={props.message.avatar.avatar} alt='avatar'></img></span>
+                <span className={classes.name}>{props.message.name}</span>
+                <span className={classes.message__text}>{props.message.message}</span>
+                <span className={classes.avatar}><img src={props.message.avatar.avatar} alt='avatar'></img></span>
             </div>
         )
     }
@@ -16,8 +17,9 @@ const Message = (props) => {
     {
         return (
             <div className={classes.message + ' ' + classes.compmessage} >
-                <span><img src={props.message.avatar.avatar} alt='avatar'></img></span>
-                <span>{props.message.message}</span>
+                <span className={classes.avatar}><img src={props.message.avatar.avatar} alt='avatar'></img></span>
+                <span className={classes.name}>{props.message.name}</span>
+                <span className={classes.message__text}>{props.message.message}</span>
             </div>
         )
     }

@@ -1,7 +1,7 @@
 import React from 'react'
 import background from '../../img/background.jpg'
 import classes from './Profile.module.css'
-import MyPosts from './MyPosts/MyPosts'
+import MyPostsContainer from './MyPosts/MyPostsContainer'
 
 const Profile = (props) => {
     return (
@@ -12,7 +12,7 @@ const Profile = (props) => {
             <div className={classes.col__other}>
                 ava + description
             </div>
-            <MyPosts col__other={classes.col__other} profilePage={props.profilePage} dispatch={props.dispatch}/>
+            <MyPostsContainer store={props.store} col__other={classes.col__other}/>
         </div>
     )
 }

@@ -3,7 +3,23 @@ import avatar from '../img/avatar.jpg'
 const SEND_MESSAGE = 'SEND-MESSAGE'
 const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE-NEW-MESSAGE-TEXT'
 
-const dialogsReducers = (state, action) => {
+let initialState = {
+    dialogsData: [
+        { id: '1', name: 'Oleg Vojtovich', avatar: { avatar } },
+        { id: '2', name: 'Dima Vojtovich', avatar: { avatar } },
+        { id: '3', name: 'Mariya Vojtovich', avatar: { avatar } },
+        { id: '4', name: 'Valentine Vojtovich', avatar: { avatar } },
+        ],
+    messagesData: [
+    { id: '1', message: 'Hi', from: 'im', name: 'Oleg Vojtovich', avatar: {avatar} },
+    { id: '2', message: 'How are you?', from: 'im', name: 'Oleg Vojtovich', avatar: {avatar} },
+    { id: '3', message: 'I\'m fine, and you?', from: 'comp', name: 'Dima Vojtovich', avatar: {avatar} },
+    { id: '4', message: 'Me too', from: 'im', name: 'Oleg Vojtovich', avatar: {avatar} },
+    ],
+    newMessageText: ''
+}
+
+const dialogsReducers = (state = initialState, action) => {
 
     switch(action.type)
     {
@@ -12,6 +28,7 @@ const dialogsReducers = (state, action) => {
                 id: '5',
                 message: state.newMessageText,
                 from: 'im',
+                name: "Oleg Vojtovich",
                 avatar: {avatar}
             }
             state.messagesData.push(newMessage)
@@ -21,7 +38,6 @@ const dialogsReducers = (state, action) => {
             state.newMessageText = action.newText
             return state
         default:
-            console.log('THERE ARE NO ACTION-TYPE LIKE ' + action.type)
             return state
     }
 }
