@@ -11,6 +11,7 @@ const Dialogs = (props) => {
     }
 
     const handleInputChange = e => {
+        debugger;
         const value = e.target.value
         props.updateNewMessageText(value)
     }

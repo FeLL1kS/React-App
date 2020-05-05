@@ -13,7 +13,7 @@ const MyPost = (props) => {
         const value = e.target.value
         props.updateNewPostText(value)
     }
-    
+    debugger;
     return (
         <div className={props.col__other}>
             <span>My posts</span>

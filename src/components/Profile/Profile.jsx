@@ -12,7 +12,7 @@ const Profile = (props) => {
             <div className={classes.col__other}>
                 ava + description
             </div>
-            <MyPostsContainer store={props.store} col__other={classes.col__other}/>
+            <MyPostsContainer col__other={classes.col__other}/>
         </div>
     )
 }

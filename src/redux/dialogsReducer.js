@@ -24,6 +24,7 @@ const dialogsReducers = (state = initialState, action) => {
     switch(action.type)
     {
         case(SEND_MESSAGE):
+        {
             let newMessage = {
                 id: '5',
                 message: state.newMessageText,
@@ -31,12 +32,18 @@ const dialogsReducers = (state = initialState, action) => {
                 name: "Oleg Vojtovich",
                 avatar: {avatar}
             }
-            state.messagesData.push(newMessage)
-            state.newMessageText = ''
-            return state
+            let newState = {...state}
+            newState.messagesData = [...state.messagesData]
+            newState.messagesData.push(newMessage)
+            newState.newMessageText = ''
+            return newState
+        }
         case(UPDATE_NEW_MESSAGE_TEXT):
-            state.newMessageText = action.newText
-            return state
+        {
+            let newState = {...state}
+            newState.newMessageText = action.newText
+            return newState
+        }
         default:
             return state
     }
