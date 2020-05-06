@@ -11,6 +11,7 @@ const Navbar = () => {
                 <NavItem to = "News" icon = "fa-file-text"/>
                 <NavItem to = "Music" icon = "fa-music"/>
                 <NavItem to = "Settings" icon = "fa-cog"/>
+                <NavItem to = "Users" icon = "fa-users" />
             </div>
         </nav>
     )

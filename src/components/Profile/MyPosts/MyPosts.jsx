@@ -13,7 +13,6 @@ const MyPost = (props) => {
         const value = e.target.value
         props.updateNewPostText(value)
     }
-    debugger;
     return (
         <div className={props.col__other}>
             <span>My posts</span>
@@ -22,7 +21,7 @@ const MyPost = (props) => {
                 <button onClick={addPost}>Add</button>
             </div>
             <div>
-                {props.profilePage.postsData.map(post => <Post message={post.message} countLikes={post.countLikes} />)}
+                {props.profilePage.postsData.map(post => <Post key={post.id} message={post.message} countLikes={post.countLikes} />)}
             </div>
         </div>
     )

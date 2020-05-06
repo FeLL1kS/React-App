@@ -11,7 +11,6 @@ const Dialogs = (props) => {
     }
 
     const handleInputChange = e => {
-        debugger;
         const value = e.target.value
         props.updateNewMessageText(value)
     }
@@ -20,11 +19,11 @@ const Dialogs = (props) => {
         <div className={classes.dialogs}>
             <div className={classes.dialogs__items}>
                 <span className={classes.header}>DIALOGS</span>
-                {props.dialogsPage.dialogsData.map(dialog => <DialogItem name={dialog.name} id={dialog.id} avatar={dialog.avatar.avatar} />)}
+                {props.dialogsPage.dialogsData.map(dialog => <DialogItem key={dialog.id} name={dialog.name} id={dialog.id} avatar={dialog.avatar.avatar} />)}
             </div>
             <span className={classes.border}></span>
             <div className={classes.messages}>
-                {props.dialogsPage.messagesData.map(message => <Message message={message} />)}
+                {props.dialogsPage.messagesData.map(message => <Message key={message.id} message={message} />)}
                 <div className={classes.messageBox}>
                     <textarea placeholder="Enter your message" ref={newPostElement} value={props.dialogsPage.newMessageText} onChange={handleInputChange}></textarea>
                     <button onClick={sendMessage}>Add</button>
