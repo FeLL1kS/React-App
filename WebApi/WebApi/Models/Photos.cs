@@ -7,14 +7,18 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models
 {
-    public class Location
+    public class Photos
     {
         [Key]
         public int Id { get; set; }
         
         [Column(TypeName = "varchar(250)")]
-        public string City { get; set; }
+        public string FileName { get; set; }
+
         [Column(TypeName = "varchar(250)")]
-        public string Country { get; set; }
+        public string FilePath { get; set; }
+
+        [Column(TypeName = "varchar(10)")]
+        public string Extension { get; set; }
     }
 }

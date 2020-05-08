@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -40,6 +41,10 @@ namespace WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts(); 
+            }
 
             app.UseStaticFiles();
 
@@ -50,6 +55,10 @@ namespace WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.Run(async(context) => {
+                await context.Response.WriteAsync("Could Not Find Anything");
             });
         }
     }

@@ -35,6 +35,7 @@ namespace WebAPI.Controllers
             foreach(Users user in users)
             {
                 user.Location = await _context.Locations.FindAsync(user.LocationId);
+                user.Photo = await _context.Photos.FindAsync(user.PhotoId);
             }
 
             return users;
@@ -46,6 +47,7 @@ namespace WebAPI.Controllers
         {
             var user = await _context.Users.FindAsync(id);
             user.Location = await _context.Locations.FindAsync(user.LocationId);
+            user.Photo = await _context.Photos.FindAsync(user.PhotoId);
 
             if (user == null)
             {

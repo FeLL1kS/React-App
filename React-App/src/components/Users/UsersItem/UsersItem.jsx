@@ -22,7 +22,7 @@ const UsersItem = (props) => {
         <div className={classes.container}>
             <div className={classes.avatar}>
                 <div>
-                    <img className={classes.profileImg} src={props.user.photoPath} alt="avatar" />
+                    <img className={classes.profileImg} src={props.user.photo.filePath} alt="avatar" />
                 </div>
                 <div>
                     {props.user.followed ? <button onClick={() => { props.unfollow(props.user.id) }}>Unfollow</button> : <button onClick={() => { props.follow(props.user.id) }}>Follow</button>}
