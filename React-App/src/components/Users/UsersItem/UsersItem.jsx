@@ -1,5 +1,6 @@
 import React from 'react'
 import classes from './UsersItem.module.css'
+import userPhoto from '../../../img/User.png'
 
 const UsersItem = (props) => {
 
@@ -22,7 +23,7 @@ const UsersItem = (props) => {
         <div className={classes.container}>
             <div className={classes.avatar}>
                 <div>
-                    <img className={classes.profileImg} src={props.user.photo.filePath} alt="avatar" />
+                    <img className={classes.profileImg} src={(props.user.photo) != null ? props.user.photo.filePath : userPhoto } alt="avatar" />
                 </div>
                 <div>
                     {props.user.followed ? <button onClick={() => { props.unfollow(props.user.id) }}>Unfollow</button> : <button onClick={() => { props.follow(props.user.id) }}>Follow</button>}

@@ -28,17 +28,25 @@ namespace WebAPI.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
+        public async Task<ActionResult<UserList>> GetUsers([FromQuery]PagingParameterModel pagingParameterModel)
         {
             List<Users> users = await _context.Users.ToListAsync();
 
-            foreach(Users user in users)
+            List<Users> items = users.Skip((pagingParameterModel.PageNumber - 1) * pagingParameterModel.PageSize).Take(pagingParameterModel.PageSize).ToList();
+
+            foreach (Users user in items)
             {
                 user.Location = await _context.Locations.FindAsync(user.LocationId);
                 user.Photo = await _context.Photos.FindAsync(user.PhotoId);
             }
 
-            return users;
+            UserList userList = new UserList
+            {
+                users = items,
+                TotalPages = (int)(Math.Ceiling(users.Count() / (double)pagingParameterModel.PageSize))
+            };
+
+            return userList;
         }
 
         // GET: api/Users/5
