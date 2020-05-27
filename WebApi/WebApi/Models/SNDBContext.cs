@@ -17,5 +17,7 @@ namespace WebAPI.Models
         public DbSet<Users> Users { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Photos> Photos { get; set; }
+        public DbSet<Contacts> Contacts { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
     }
 }

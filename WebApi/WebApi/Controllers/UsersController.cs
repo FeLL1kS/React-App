@@ -103,6 +103,19 @@ namespace WebAPI.Controllers
             _context.Users.Add(users);
             await _context.SaveChangesAsync();
 
+            Contacts contacts = new Contacts();
+            _context.Contacts.Add(contacts);
+            _context.SaveChanges();
+
+            Profile profile = new Profile
+            {
+                FullName = users.Name,
+                UserId = users.Id,
+                ContactsId = contacts.Id
+            };
+            _context.Profiles.Add(profile);
+            _context.SaveChanges();
+
             return CreatedAtAction("GetUsers", new { id = users.Id }, users);
         }
 

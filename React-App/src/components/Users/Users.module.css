@@ -5,3 +5,13 @@
 .selectedPage {
     font-weight: bold;
 }
+
+.point span {
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.point span:first-child {
+    margin-left: 10px;
+}
+
