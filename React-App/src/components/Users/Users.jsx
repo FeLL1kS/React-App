@@ -13,7 +13,7 @@ let Users = (props) => {
     return(
         <div>
             <div className={classes.point}>
-                {pages.map(p => (<span onClick={() => props.onPageChanged(p)} className={props.currentPage === p && classes.selectedPage}>{p}</span>))}
+                {pages.map(p => (<span key={p} onClick={() => props.onPageChanged(p)} className={props.currentPage === p ? classes.selectedPage : ''}>{p}</span>))}
             </div>
             {props.isFetching ? <Preloader /> : null}
             { props.users.map(u => (<UsersItem isFetching={props.isFetching} key={u.id}  user={u} follow={props.follow} unfollow={props.unfollow}/>)) }

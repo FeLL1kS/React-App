@@ -40,6 +40,8 @@ namespace WebAPI.Controllers
             Profile profile = (from p in _context.Profiles where p.UserId == id select p).FirstOrDefault();
             profile.Contacts = await _context.Contacts.FindAsync(profile.ContactsId);
             profile.User = await _context.Users.FindAsync(profile.UserId);
+            profile.User.Location = await _context.Locations.FindAsync(profile.User.LocationId);
+            profile.User.Photo = await  _context.Photos.FindAsync(profile.User.PhotoId);
 
             if (profile == null)
             {
@@ -60,12 +62,13 @@ namespace WebAPI.Controllers
             pr.LookingForAJobDesription = profile.LookingForAJobDesription;
             pr.FullName = profile.FullName;
             pr.Contacts = profile.Contacts;
-
+            
             Contacts contacts = pr.Contacts;
             contacts.Id = (int)pr.ContactsId;
 
             _context.Profiles.Update(pr);
-            _context.Contacts.Update(contacts);
+            if(contacts != null)
+                _context.Contacts.Update(contacts);
 
             try
             {

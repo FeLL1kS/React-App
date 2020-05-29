@@ -1,17 +1,12 @@
 import React from 'react'
-import background from '../../img/background.jpg'
 import classes from './Profile.module.css'
 import MyPostsContainer from './MyPosts/MyPostsContainer'
+import ProfileInfo from './ProfileInfo/ProfileInfo'
 
 const Profile = (props) => {
     return (
         <div className={classes.profile}>
-            <div className={classes.col}>
-                <img src={background} alt="background"></img>
-            </div>
-            <div className={classes.col__other}>
-                ava + description
-            </div>
+            <ProfileInfo col__other={classes.col__other} col={classes.col} profile={props.profile}/>
             <MyPostsContainer col__other={classes.col__other}/>
         </div>
     )
