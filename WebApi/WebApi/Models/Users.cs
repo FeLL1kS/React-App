@@ -14,6 +14,12 @@ namespace WebAPI.Models
         public string Name { get; set; }
 
         [Column(TypeName = "varchar(100)")]
+        public string Email { get; set; }
+
+        [Column(TypeName = "varchar(50)")]
+        public string Password { get; set; }
+
+        [Column(TypeName = "varchar(100)")]
         public string Status { get; set; }
 
         [Column(TypeName = "bit")]

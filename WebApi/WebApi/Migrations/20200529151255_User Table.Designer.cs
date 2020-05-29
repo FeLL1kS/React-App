@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI.Models;
 
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(SNDBContext))]
-    partial class SNDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200529151255_User Table")]
+    partial class UserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,7 +124,7 @@ namespace WebAPI.Migrations
                     b.ToTable("Profiles");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Users", b =>
+            modelBuilder.Entity("WebAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -132,6 +134,21 @@ namespace WebAPI.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("varchar(100)");
 
+                    b.Property<string>("Password")
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
+                });
+
+            modelBuilder.Entity("WebAPI.Models.Users", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<bool>("Followed")
                         .HasColumnType("bit");
 
@@ -140,9 +157,6 @@ namespace WebAPI.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("varchar(50)");
 
                     b.Property<int?>("PhotoId")
                         .HasColumnType("int");

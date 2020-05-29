@@ -9,10 +9,7 @@ namespace WebAPI.Models
     public class SNDBContext : DbContext
     {
         public SNDBContext(DbContextOptions<SNDBContext> options)
-            : base(options)
-        {
-
-        }
+            : base(options) { }
 
         public DbSet<Users> Users { get; set; }
         public DbSet<Location> Locations { get; set; }

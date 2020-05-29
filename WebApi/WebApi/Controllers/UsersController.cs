@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Web;
+using Microsoft.AspNetCore.Authorization;
 //using System.Web.Http;
 
 
@@ -17,6 +18,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly SNDBContext _context;
