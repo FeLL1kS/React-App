@@ -5,7 +5,6 @@ import classes from './ProfileInfo.module.css'
 import user from '../../../img/User.png'
 
 let ProfileInfo = (props) => {
-    console.log(props)
     return (
         <>
             <div className={props.col}>

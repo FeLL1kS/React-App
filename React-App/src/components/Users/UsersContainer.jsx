@@ -11,7 +11,6 @@ class UsersContainer extends React.Component {
         axios.get("http://localhost:2669/api/users?pageSize=" + this.props.pageSize + "&pageNumber=" + this.props.currentPage)
         .then(response => {
             this.props.toggleIsFetching(false)
-            debugger
             this.props.setUsers(response.data.users)
             this.props.setTotalPages(response.data.totalPages)
         })

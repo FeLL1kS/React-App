@@ -7,7 +7,6 @@
 
 .avatar {
     grid-area: avatar;
-    height: 300px;
     width: 240px;
 }
 
