@@ -14,60 +14,107 @@ using WebAPI.ViewModel;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/auth/me")]
+    [Route("api/auth/")]
     [ApiController]
     [Authorize]
     public class AccountController : ControllerBase
     {
-        private SNDBContext db;
+        private SNDBContext _context;
         public AccountController(SNDBContext context)
         {
-            db = context;
-        }
-
-        [HttpGet]
-        public string Get()
-        {
-            return "Authorized";
+            _context = context;
         }
 
         [AllowAnonymous]
-        [HttpPost]
-        public async Task<string> Login(LoginModel model)
+        [HttpGet("me")]
+        public ActionResult<AuthModel> Get()
+        {
+            if(User.Identity.IsAuthenticated)
+            { 
+                return new AuthModel { ResultCode = 0, Data = User.Identity.Name, Messages = "" };
+            }
+            else
+            {
+                return new AuthModel { ResultCode = 1, Messages = "Not Authenticated!" };
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<ActionResult<Users>> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                Users user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+                Users user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
                 if(user != null)
                 {
-                    await Authenticate(model.Email);
+                    await Authenticate(user.Id.ToString());
 
-                    return "Авторизовано";
+                    return user;
                 }
             }
-            return "Пользователя нет";
+            return NotFound();
         }
 
-        private async Task Authenticate(string userName)
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<ActionResult<Users>> Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Users user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                if (user == null)
+                {
+                    user = new Users
+                    {
+                        Email = model.Email,
+                        Password = model.Password,
+                        Name = model.Name + ' ' + model.Surname,
+                        LocationId = model.LocationId,
+                    };
+
+                    _context.Users.Add(user);
+                    await _context.SaveChangesAsync();
+
+                    _context.Contacts.Add(model.Contacts);
+                    await _context.SaveChangesAsync();
+
+                    Profile profile = new Profile
+                    {
+                        ContactsId = model.Contacts.Id,
+                        UserId = user.Id,
+                        LookingForAJob = model.LookingForAJob,
+                        LookingForAJobDescription = model.LookingForAJobDescription
+                    };
+
+                    _context.Profiles.Add(profile);
+                    await _context.SaveChangesAsync();
+
+                    await Authenticate(user.Id.ToString());
+
+                    return CreatedAtAction("Register", new { id = user.Id }, user);
+                }
+                else
+                    return NotFound();
+            }
+            return BadRequest();
+        }
+
+        private async Task Authenticate(string userId)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userId)
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 
-        [HttpGet("logout")]
-        public async Task Logout()
-        {
-            await ConfirmLogout();
-        }
-
-        public async Task<IActionResult> ConfirmLogout()
+        [HttpDelete("logout")]
+        public async Task<string> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+            return "Logout Success";
         }
     }
 }

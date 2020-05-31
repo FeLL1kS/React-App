@@ -1,104 +1,194 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Models;
+using WebAPI.ViewModel;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("api/profile")]
     [ApiController]
     public class ProfilesController : ControllerBase
     {
         private readonly SNDBContext _context;
+        IWebHostEnvironment _appEnvironment;
 
-        public ProfilesController(SNDBContext context)
+        public ProfilesController(SNDBContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
-        // GET: api/Profiles
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Profile>>> GetProfiles()
-        {
-            List<Profile> profiles = await _context.Profiles.ToListAsync();
-            foreach (Profile profile in profiles)
-            {
-                profile.Contacts = await _context.Contacts.FindAsync(profile.ContactsId);
-                profile.User = await _context.Users.FindAsync(profile.UserId);
-            }
-            return profiles;
-        }
-
+        [AllowAnonymous]
         // GET: api/Profiles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Profile>> GetProfile(int id)
+        public async Task<ActionResult<ProfileModel>> GetProfile(int id)
         {
-            Profile profile = (from p in _context.Profiles where p.UserId == id select p).FirstOrDefault();
-            profile.Contacts = await _context.Contacts.FindAsync(profile.ContactsId);
-            profile.User = await _context.Users.FindAsync(profile.UserId);
-            profile.User.Location = await _context.Locations.FindAsync(profile.User.LocationId);
-            profile.User.Photo = await  _context.Photos.FindAsync(profile.User.PhotoId);
-
-            if (profile == null)
-            {
-                return NotFound();
-            }
-
-            return profile;
-        }
-
-        // PUT: api/Profiles/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProfile(int id, Profile profile)
-        {
-            Profile pr = (from p in _context.Profiles where p.UserId == id select p).FirstOrDefault();
-            pr.LookingForAJob = profile.LookingForAJob;
-            pr.LookingForAJobDesription = profile.LookingForAJobDesription;
-            pr.FullName = profile.FullName;
-            pr.Contacts = profile.Contacts;
-            
-            Contacts contacts = pr.Contacts;
-            contacts.Id = (int)pr.ContactsId;
-
-            _context.Profiles.Update(pr);
-            if(contacts != null)
-                _context.Contacts.Update(contacts);
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProfileExists(id))
+                Profile profile = (from p in _context.Profiles where p.UserId == id select p).FirstOrDefault();
+                Users user = await _context.Users.FindAsync(profile.UserId);
+                user.Photo = await _context.Photos.FindAsync(user.PhotoId);
+                Contacts contacts = await _context.Contacts.FindAsync(profile.ContactsId);
+
+                ProfileModel model = new ProfileModel
+                {
+                    UserId = (int)profile.UserId,
+                    LookingForAJob = profile.LookingForAJob,
+                    LookingForAJobDescription = profile.LookingForAJobDescription,
+                    FullName = user.Name,
+                    Status = user.Status,
+                    Contacts = contacts,
+                };
+                try
+                {
+                    model.Photo = user.Photo.FilePath;
+                }
+                catch(Exception ex)
+                {
+                    model.Error = ex.ToString();
+                }
+
+                if (profile == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                return model;
+            }
+            catch(Exception ex)
+            {
+                return new ProfileModel { Error = ex.ToString() };
+            }
         }
 
-        // POST: api/Profiles
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Profile>> PostProfile(Profile profile)
+        [AllowAnonymous]
+        [HttpGet("status/{id}")]
+        public async Task<string> GetStatus(int id)
         {
-            _context.Profiles.Add(profile);
-            await _context.SaveChangesAsync();
+            Users user = await _context.Users.FindAsync(id);
+            try
+            {
+                return user.Status;
+            }
+            catch
+            {
+                return "Couldn't find user"; 
+            }
+        }
 
-            return CreatedAtAction("GetProfile", new { id = profile.Id }, profile);
+        [HttpPut]
+        public async Task<ActionResult<ProfileModel>> PutProfile(ProfileModel profile)
+        {
+            profile.UserId = Int32.Parse(User.Identity.Name);
+            
+            Users user = await _context.Users.FindAsync(profile.UserId);
+            user.Name = profile.FullName;
+            
+            Profile pr = (from p in _context.Profiles where p.UserId == profile.UserId select p).FirstOrDefault();
+            pr.LookingForAJob = profile.LookingForAJob;
+            pr.LookingForAJobDescription = profile.LookingForAJobDescription;
+            
+            profile.Contacts.Id = (int)pr.ContactsId;
+            
+            _context.Contacts.Update(profile.Contacts);
+            _context.Users.Update(user);
+            _context.Profiles.Update(pr);
+            await _context.SaveChangesAsync();
+            return profile;
+        }
+
+        [HttpPut("photo")]
+        public async Task<string> PutPhoto([FromForm] FileUploadAPI objFile)
+        {
+            try
+            {
+                if (objFile.Files.Length > 0)
+                {
+                    if (!Directory.Exists(_appEnvironment.WebRootPath + "\\Files\\"))
+                    {
+                        Directory.CreateDirectory(_appEnvironment.WebRootPath + "\\Files\\");
+                    }
+
+                    string Alphabet = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+                    Random rnd = new Random();
+                    StringBuilder sb = new StringBuilder(9);
+                    int Position = 0;
+                    for (int i = 0; i <= 9; i++)
+                    {
+                        Position = rnd.Next(0, Alphabet.Length - 1);
+                        sb.Append(Alphabet[Position]);
+                    }
+
+                    string FileName = sb.ToString();
+                    string[] nameAndExtension = objFile.Files.FileName.Split('.');
+                    nameAndExtension[0] = FileName;
+
+                    using (FileStream fileStream = System.IO.File.Create(_appEnvironment.WebRootPath + "\\Files\\" + nameAndExtension[0] + '.' + nameAndExtension[1]))
+                    {
+                        objFile.Files.CopyTo(fileStream);
+                        fileStream.Flush();
+                        Photos photo = (from p in _context.Photos where p.FilePath == "http://localhost:2669/Files/" + nameAndExtension[0] + '.' + nameAndExtension[1] select p).FirstOrDefault();
+                        if(photo == null)
+                        {
+                            photo = new Photos
+                            {
+                                FileName = nameAndExtension[0],
+                                Extension = nameAndExtension[1],
+                                FilePath = "http://localhost:2669/Files/" + nameAndExtension[0] + '.' + nameAndExtension[1]
+                            };
+                            
+                            _context.Photos.Add(photo);
+                            await _context.SaveChangesAsync();
+                        }
+                        
+                        Users user = await _context.Users.FindAsync(Int32.Parse(User.Identity.Name));
+                        if(user.PhotoId != null)
+                        {
+                            Photos ph = await _context.Photos.FindAsync(user.PhotoId);
+                            System.IO.File.Delete(_appEnvironment.WebRootPath + "\\Files\\" + ph.FileName + '.' + ph.Extension);
+                            _context.Photos.Remove(ph);
+                        }
+                        user.PhotoId = photo.Id;
+                        await _context.SaveChangesAsync();
+                        return "\\Upload\\" + nameAndExtension[0] + '.' + nameAndExtension[1];
+                    }
+                }
+                else
+                {
+                    return "Failed";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message.ToString();
+            }
+        }
+
+        [HttpPut("status")]
+        public async Task<string> PutStatus(StatusModel status)
+        {
+            try
+            {
+                Users user = (from u in _context.Users where u.Id == Int32.Parse(User.Identity.Name) select u).FirstOrDefault();
+                user.Status = status.Status;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                return "Status is changed";
+            }
+            catch(Exception ex)
+            {
+                return ex.ToString();
+            }
         }
 
         // DELETE: api/Profiles/5
@@ -115,11 +205,6 @@ namespace WebAPI.Controllers
             await _context.SaveChangesAsync();
 
             return profile;
-        }
-
-        private bool ProfileExists(int id)
-        {
-            return _context.Profiles.Any(e => e.Id == id);
         }
     }
 }

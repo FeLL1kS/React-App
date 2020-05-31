@@ -15,10 +15,7 @@ namespace WebAPI.Models
         public bool LookingForAJob { get; set; }
 
         [Column(TypeName = "varchar(300)")]
-        public string LookingForAJobDesription { get; set; }
-
-        [Column(TypeName = "varchar(100)")]
-        public string FullName { get; set; }
+        public string LookingForAJobDescription { get; set; }
 
         [ForeignKey("ContactsId")]
         public int? ContactsId { get; set; }
@@ -27,6 +24,5 @@ namespace WebAPI.Models
         [ForeignKey("UserId")]
         public int? UserId { get; set; }
         public Users User { get; set; }
-
     }
 }

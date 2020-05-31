@@ -11,11 +11,7 @@ let initialState = {
     ],
     newPostText: '',
     profile: {
-        user: {
-            photo: {
-                
-            }
-        }
+        contacts: { }
     }
 }
 

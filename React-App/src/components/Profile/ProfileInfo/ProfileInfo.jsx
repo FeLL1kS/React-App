@@ -2,8 +2,10 @@ import React from 'react'
 import background from '../../../img/background.jpg'
 import Preloader from '../../common/preloader/Preloader'
 import classes from './ProfileInfo.module.css'
+import user from '../../../img/User.png'
 
 let ProfileInfo = (props) => {
+    console.log(props)
     return (
         <>
             <div className={props.col}>
@@ -12,17 +14,17 @@ let ProfileInfo = (props) => {
 
             <div className={props.col__other + ' ' + classes.infoPanel}>
                 {
-                    !props.profile.user.photo.filePath ? <Preloader /> : 
+                    props.profile === null ? <Preloader /> : 
                     <>
                     <div className={classes.avatar}>
-                        <img src={props.profile.user.photo.filePath} alt={'avatar'}/>
+                        <img src={props.profile.photo !== null ? props.profile.photo : user} alt={'avatar'}/>
                     </div>
                     <div className={classes.mainInfo}>
                         <ul>
                             <li><div>{props.profile.fullName}</div></li>
-                            <li><div>{props.profile.user.status}</div></li>
+                            {props.profile.status !== null && <li><div>{props.profile.status}</div></li>}
                             <li>{props.profile.lookingForAJob ? <div>Ищет работу</div> : <div>Не ищет работу</div>}</li>
-                            <li><div>{props.profile.lookingForAJobDesription}</div></li>
+                            {props.profile.lookingForAJobDescription !== null && <li><div>{props.profile.lookingForAJobDescription}</div></li>}
                         </ul>
                         
                     </div>

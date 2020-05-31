@@ -11,14 +11,12 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using Microsoft.AspNetCore.Authorization;
-//using System.Web.Http;
 
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly SNDBContext _context;
@@ -94,31 +92,6 @@ namespace WebAPI.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/Users
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Users>> PostUsers(Users users)
-        {
-            _context.Users.Add(users);
-            await _context.SaveChangesAsync();
-
-            Contacts contacts = new Contacts();
-            _context.Contacts.Add(contacts);
-            _context.SaveChanges();
-
-            Profile profile = new Profile
-            {
-                FullName = users.Name,
-                UserId = users.Id,
-                ContactsId = contacts.Id
-            };
-            _context.Profiles.Add(profile);
-            _context.SaveChanges();
-
-            return CreatedAtAction("GetUsers", new { id = users.Id }, users);
         }
 
         // DELETE: api/Users/5

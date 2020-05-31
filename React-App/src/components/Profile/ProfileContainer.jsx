@@ -10,7 +10,7 @@ class ProfileContainer extends React.Component {
     componentDidMount()
     {
         let userId = this.props.match.params.userId ? this.props.match.params.userId : '7' 
-        axios.get("http://localhost:2669/api/profiles/" + userId)
+        axios.get("http://localhost:2669/api/profile/" + userId)
         .then(response => {
             this.props.setUserProfile(response.data)
         })
