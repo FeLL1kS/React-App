@@ -16,7 +16,13 @@ let Users = (props) => {
                 {pages.map(p => (<span key={p} onClick={() => props.onPageChanged(p)} className={props.currentPage === p ? classes.selectedPage : ''}>{p}</span>))}
             </div>
             {props.isFetching ? <Preloader /> : null}
-            { props.users.map(u => (<UsersItem isFetching={props.isFetching} key={u.id}  user={u} follow={props.follow} unfollow={props.unfollow}/>)) }
+            { props.users.map(u => (<UsersItem  isFetching={props.isFetching} 
+                                                key={u.id}  
+                                                user={u} 
+                                                follow={props.follow} 
+                                                unfollow={props.unfollow} 
+                                                followingInProgress={props.followingInProgress}
+                                                toggleIsFollowingInProgress={props.toggleIsFollowingInProgress}/>)) }
         </div>
     )
 }
