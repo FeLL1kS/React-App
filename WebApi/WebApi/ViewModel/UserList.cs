@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.Models
+namespace WebAPI.ViewModel
 {
     public class UserList
     {
-        public List<Users> users;
+        public List<UserModel> users;
         public int TotalPages { get; set; }
     }
 }

@@ -9,7 +9,7 @@ class ProfileContainer extends React.Component {
     
     componentDidMount()
     {
-        let userId = this.props.match.params.userId ? this.props.match.params.userId : '7' 
+        let userId = this.props.match.params.userId ? this.props.match.params.userId : '16' 
         axios.get("http://localhost:2669/api/profile/" + userId)
         .then(response => {
             this.props.setUserProfile(response.data)
@@ -26,7 +26,7 @@ class ProfileContainer extends React.Component {
 }
 
 let mapStateToProps = (state) => ({
-    profile: state.profilePage.profile
+    profile: state.profilePage.profile,
 })
 
 let mapActionToProps = {

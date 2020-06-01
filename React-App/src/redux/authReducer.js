@@ -14,7 +14,7 @@ const authReducer = (state = initialState, action) => {
         case SET_USER_DATA:
             return {
                 ...state,
-                userId: action.payload,
+                ...action.payload,
                 isAuth: true
             };
         case SET_USER_PHOTO:

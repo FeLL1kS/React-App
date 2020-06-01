@@ -26,17 +26,24 @@ namespace WebAPI.Controllers
             _context = context;
         }
 
+        public class Data
+        {
+            public string UserId { get; set; }
+            public string Email { get; set; }
+        }
+
         [AllowAnonymous]
         [HttpGet("me")]
-        public ActionResult<AuthModel> Get()
+        public async Task<ActionResult<ResultModel<Data>>> Get()
         {
             if(User.Identity.IsAuthenticated)
-            { 
-                return new AuthModel { ResultCode = 0, Data = User.Identity.Name, Messages = "" };
+            {
+                Users user = await _context.Users.FindAsync(Int32.Parse(User.Identity.Name));
+                return new ResultModel<Data> { ResultCode = 0, Data = new Data { UserId = User.Identity.Name, Email = user.Email }, Messages = "" };
             }
             else
             {
-                return new AuthModel { ResultCode = 1, Messages = "Not Authenticated!" };
+                return new ResultModel<Data> { ResultCode = 1, Messages = "Not Authenticated!" };
             }
         }
 

@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace WebAPI.ViewModel
 {
-    public class AuthModel
+    public class ResultModel<T>
     {
         public int ResultCode { get; set; }
         public string Messages { get; set; }
-        public string Data { get; set; }
+        public T Data { get; set; }
     }
 }

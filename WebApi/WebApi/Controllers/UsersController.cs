@@ -11,7 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using Microsoft.AspNetCore.Authorization;
-
+using WebAPI.ViewModel;
 
 namespace WebAPI.Controllers
 {
@@ -31,18 +31,35 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<UserList>> GetUsers([FromQuery]PagingParameterModel pagingParameterModel)
         {
             List<Users> users = await _context.Users.ToListAsync();
-
             List<Users> items = users.Skip((pagingParameterModel.PageNumber - 1) * pagingParameterModel.PageSize).Take(pagingParameterModel.PageSize).ToList();
+            List<UserModel> models = new List<UserModel>();
 
             foreach (Users user in items)
             {
                 user.Location = await _context.Locations.FindAsync(user.LocationId);
                 user.Photo = await _context.Photos.FindAsync(user.PhotoId);
+                UserModel model = new UserModel
+                {
+                    Id = user.Id,
+                    Location = user.Location,
+                    Name = user.Name,
+                    Status = user.Status
+                };
+                if(user.Photo != null)
+                {
+                    model.Photo = user.Photo.FilePath;
+                }
+                Followers follower = (from f in _context.Followers where f.CurrentUser == Int32.Parse(User.Identity.Name) && f.RequestedUser == user.Id select f).FirstOrDefault();
+                if (follower != null)
+                    model.Followed = true;
+                else
+                    model.Followed = false;
+                models.Add(model);
             }
 
             UserList userList = new UserList
             {
-                users = items,
+                users = models,
                 TotalPages = (int)(Math.Ceiling(users.Count() / (double)pagingParameterModel.PageSize))
             };
 
@@ -51,68 +68,32 @@ namespace WebAPI.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Users>> GetUsers(int id)
+        public async Task<ActionResult<UserModel>> GetUsers(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            Users user = await _context.Users.FindAsync(id);
             user.Location = await _context.Locations.FindAsync(user.LocationId);
             user.Photo = await _context.Photos.FindAsync(user.PhotoId);
+
+            UserModel model = new UserModel
+            {
+                Id = user.Id,
+                Location = user.Location,
+                Name = user.Name,
+                Photo = user.Photo.FilePath,
+                Status = user.Status
+            };
+            Followers follower = (from f in _context.Followers where f.CurrentUser == Int32.Parse(User.Identity.Name) && f.RequestedUser == user.Id select f).FirstOrDefault();
+            if (follower != null)
+                model.Followed = true;
+            else
+                model.Followed = false;
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            return user;
-        }
-
-        // PUT: api/Users/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsers(int id, Users users)
-        {
-            users.Id = id;
-
-            _context.Entry(users).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsersExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Users>> DeleteUsers(int id)
-        {
-            var users = await _context.Users.FindAsync(id);
-            if (users == null)
-            {
-                return NotFound();
-            }
-
-            _context.Users.Remove(users);
-            await _context.SaveChangesAsync();
-
-            return users;
-        }
-
-        private bool UsersExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
+            return model;
         }
     }
 }

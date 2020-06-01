@@ -22,9 +22,6 @@ namespace WebAPI.Models
         [Column(TypeName = "varchar(100)")]
         public string Status { get; set; }
 
-        [Column(TypeName = "bit")]
-        public bool Followed { get; set; }
-
         [ForeignKey("LocationId")]
         public int? LocationId { get; set; }
         public Location Location { get; set; }
