@@ -3,10 +3,8 @@ import classes from './UsersItem.module.css'
 import userPhoto from '../../../img/User.png'
 import Preloader from '../../common/preloader/Preloader'
 import { NavLink } from 'react-router-dom'
-import { followAPI } from '../../../api/api'
 
 const UsersItem = (props) => {
-
     let printLocation = () => {
         if(props.user.location !== null)
         {
@@ -22,25 +20,11 @@ const UsersItem = (props) => {
     }
 
     let onClickFollow = (id) => {
-        props.toggleIsFollowingInProgress(true, id)
-        followAPI.follow(id).then(data => {
-            if(data.resultCode === 0)
-            {
-                props.follow(id)
-            }
-            props.toggleIsFollowingInProgress(false, id)
-        })
+        props.following(id)
     }
 
     let onClickUnfollow = (id) => {
-        props.toggleIsFollowingInProgress(true, id)
-        followAPI.unfollow(id).then(data => {
-            if(data.resultCode === 0)
-            {
-                props.unfollow(id)
-            }
-            props.toggleIsFollowingInProgress(false, id)
-        })
+        props.following(id, false)
     }
 
     return (

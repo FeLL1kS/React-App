@@ -19,10 +19,8 @@ let Users = (props) => {
             { props.users.map(u => (<UsersItem  isFetching={props.isFetching} 
                                                 key={u.id}  
                                                 user={u} 
-                                                follow={props.follow} 
-                                                unfollow={props.unfollow} 
-                                                followingInProgress={props.followingInProgress}
-                                                toggleIsFollowingInProgress={props.toggleIsFollowingInProgress}/>)) }
+                                                following={props.following} 
+                                                followingInProgress={props.followingInProgress}/>)) }
         </div>
     )
 }
