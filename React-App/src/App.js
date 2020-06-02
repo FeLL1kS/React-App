@@ -9,6 +9,7 @@ import { Route } from 'react-router-dom';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
+import Login from './components/Login/Login';
 
 const App = (props) => {
   return (
@@ -18,6 +19,7 @@ const App = (props) => {
         <div className='app-wraper-content'>
           <Route render={ () => <ProfileContainer /> } path='/profile/:userId?'/>
           <Route render={ () => <DialogsContainer />} path='/dialogs' />
+          <Route component={Login} path='/login' />
           <Route component={News} path='/news' />
           <Route component={Music} path='/music' />
           <Route component={Settings} path='/settings' />

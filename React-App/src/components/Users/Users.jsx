@@ -20,7 +20,8 @@ let Users = (props) => {
                                                 key={u.id}  
                                                 user={u} 
                                                 following={props.following} 
-                                                followingInProgress={props.followingInProgress}/>)) }
+                                                followingInProgress={props.followingInProgress}
+                                                currentUserId={props.currentUserId}/>)) }
         </div>
     )
 }

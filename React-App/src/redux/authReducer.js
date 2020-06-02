@@ -37,9 +37,7 @@ export const getAuthInfo = () => (dispatch) => {
         if(data.resultCode === 0)
         {
             dispatch(setUserData(data.data))
-            profileAPI.profileInfo(data.data.userId).then(data => {
-                dispatch(setUserPhoto(data.photo))
-            })
+            profileAPI.profileInfo(data.data.userId).then(data => dispatch(setUserPhoto(data.photo)))
         }
     })
 }

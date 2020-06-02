@@ -26,7 +26,7 @@ const UsersItem = (props) => {
     let onClickUnfollow = (id) => {
         props.following(id, false)
     }
-
+    
     return (
         <div className={classes.container}>
             <div className={classes.avatar}>
@@ -37,7 +37,7 @@ const UsersItem = (props) => {
                 </NavLink>
                 <div>
                     {props.user.followed ? <button disabled={props.followingInProgress.some(id => id === props.user.id)} onClick={() => { onClickUnfollow(props.user.id) }}>Unfollow</button> 
-                    : <button disabled={props.followingInProgress.some(id => id === props.user.id)} onClick={() => { onClickFollow(props.user.id) }}>Follow</button>}
+                    : <button disabled={props.followingInProgress.some(id => id === props.user.id) || parseInt(props.currentUserId) === props.user.id} onClick={() => { onClickFollow(props.user.id) }}>Follow</button>}
                 </div>
             </div>
             <div className={classes.infoPanel}>
