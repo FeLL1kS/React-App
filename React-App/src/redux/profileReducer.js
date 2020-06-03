@@ -3,6 +3,7 @@ import { authAPI, profileAPI } from "../api/api"
 const ADD_POST = 'ADD-POST'
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT'
 const SET_USER_PROFILE = 'SET-USER-PROFILE'
+const UPDATE_STATUS_TEXT = 'UPDATE-STATUS-TEXT'
 
 let initialState = {
     postsData: [
@@ -42,6 +43,11 @@ const profileReducer = (state = initialState, action) => {
                 ...state,
                 profile: action.payload
             }
+        case UPDATE_STATUS_TEXT:
+            return {
+                ...state,
+                profile: {...state.profile, status: action.payload}
+            }
         default:
             return state
     }
@@ -50,14 +56,22 @@ const profileReducer = (state = initialState, action) => {
 export const addPostCreator = () => ({ type: ADD_POST })
 export const updateNewPostTextCreator = (value) => ({ type: UPDATE_NEW_POST_TEXT, newText: value })
 export const setUserProfile = (payload) => ({ type: SET_USER_PROFILE, payload })
+export const updateStatusText = (payload) => ({ type: UPDATE_STATUS_TEXT, payload })
 
 export const getProfile = (userId) => (dispatch) => {
     authAPI.me().then(data => {
-        if(data.resultCode === 0)
+        try
         {
             profileAPI.profileInfo(userId ? userId : data.data.userId).then(data => dispatch(setUserProfile(data)))
         }
+        catch
+        {
+        }
     })
-} 
+}
+
+export const changeStatus = (status) => (dispatch) => {
+    profileAPI.changeStatus(status)
+}
 
 export default profileReducer

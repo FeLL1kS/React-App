@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { following, setCurrentPage, toggleIsFollowingInProgress, getUsers } from '../../redux/usersReducer'
 import Users from './Users';
-import { withAuthRedirect } from '../../hoc/withAuthRedirect';
+// import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 import { compose } from 'redux';
 
 class UsersContainer extends React.Component {
@@ -52,6 +52,6 @@ let mapActionToProps = {
 }
 
 export default compose(
-    withAuthRedirect,
+    // withAuthRedirect,
     connect(mapStateToProps, mapActionToProps)
 )(UsersContainer)

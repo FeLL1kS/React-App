@@ -6,7 +6,8 @@ import ProfileInfo from './ProfileInfo/ProfileInfo'
 const Profile = (props) => {
     return (
         <div className={classes.profile}>
-            <ProfileInfo col__other={classes.col__other} col={classes.col} profile={props.profile}/>
+            <ProfileInfo    profile={props.profile} updateStatusText={props.updateStatusText} 
+                            changeStatus={props.changeStatus} currentUser={props.currentUser}/>
             <MyPostsContainer col__other={classes.col__other}/>
         </div>
     )

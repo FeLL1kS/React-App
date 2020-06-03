@@ -1,17 +1,18 @@
 import React from 'react'
 import background from '../../../img/background.jpg'
 import Preloader from '../../common/preloader/Preloader'
-import classes from './ProfileInfo.module.css'
+import classes from '../Profile.module.css'
 import user from '../../../img/User.png'
+import ProfileStatus from './ProfileStatus'
 
 let ProfileInfo = (props) => {
     return (
         <>
-            <div className={props.col}>
+            <div className={classes.col}>
                 <img src={background} alt='background'></img>
             </div>
 
-            <div className={props.col__other + ' ' + classes.infoPanel}>
+            <div className={classes.col__other + ' ' + classes.infoPanel}>
                 {
                     props.profile === null ? <Preloader /> : 
                     <>
@@ -21,7 +22,9 @@ let ProfileInfo = (props) => {
                     <div className={classes.mainInfo}>
                         <ul>
                             <li><div>{props.profile.fullName}</div></li>
-                            {props.profile.status !== null && <li><div>{props.profile.status}</div></li>}
+                            {props.profile.status !== null && <li><ProfileStatus    status={props.profile.status} updateStatusText={props.updateStatusText} 
+                                                                                    changeStatus={props.changeStatus} currentUser={props.currentUser}
+                                                                                    requestedUser={props.profile.userId}/></li>}
                             <li>{props.profile.lookingForAJob ? <div>Ищет работу</div> : <div>Не ищет работу</div>}</li>
                             {props.profile.lookingForAJobDescription !== null && <li><div>{props.profile.lookingForAJobDescription}</div></li>}
                         </ul>

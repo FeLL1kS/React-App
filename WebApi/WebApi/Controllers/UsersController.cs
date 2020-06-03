@@ -49,11 +49,18 @@ namespace WebAPI.Controllers
                 {
                     model.Photo = user.Photo.FilePath;
                 }
-                Followers follower = (from f in _context.Followers where f.CurrentUser == Int32.Parse(User.Identity.Name) && f.RequestedUser == user.Id select f).FirstOrDefault();
-                if (follower != null)
-                    model.Followed = true;
-                else
+                try
+                {
+                    Followers follower = (from f in _context.Followers where f.CurrentUser == Int32.Parse(User.Identity.Name) && f.RequestedUser == user.Id select f).FirstOrDefault();
+                    if (follower != null)
+                        model.Followed = true;
+                    else
+                        model.Followed = false;
+                }
+                catch
+                {
                     model.Followed = false;
+                }
                 models.Add(model);
             }
 
