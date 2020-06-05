@@ -1,0 +1,1 @@
+This project was created to study the basics of React and Redux.

@@ -12,7 +12,7 @@ const Header = (props) => {
                 <NavLink to='/profile'><img src={logo} alt="logo" /></NavLink>
             </div>
             <div className={classes.loginBlock}>
-                { props.isAuth ? <div>{props.email}</div> : <NavLink to='/login'>Login</NavLink> }
+                { props.isAuth ? <div>{props.email}<button onClick={props.onClickLogout}>Logout</button></div> : <NavLink to='/login'>Login</NavLink> }
                 {props.photo && <img src={(props.photo) != null ? props.photo : userPhoto } alt={props.isFetching ? <Preloader /> : null} />}
             </div>
         </header>

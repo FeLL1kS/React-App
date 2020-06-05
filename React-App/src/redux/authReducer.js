@@ -1,4 +1,5 @@
 import { authAPI, profileAPI } from "../api/api";
+import { stopSubmit } from "redux-form";
 
 const SET_USER_DATA = 'SET-USER-DATA'
 const SET_USER_PHOTO = 'SET-USER-PHOTO'
@@ -17,7 +18,6 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
-                isAuth: true
             };
         case SET_USER_PHOTO:
             return {
@@ -36,14 +36,31 @@ export const getAuthInfo = () => (dispatch) => {
     authAPI.me().then(data => {        
         if(data.resultCode === 0)
         {
-            dispatch(setUserData(data.data))
+            dispatch(setUserData({...data.data, isAuth: true}))
             profileAPI.profileInfo(data.data.userId).then(data => dispatch(setUserPhoto(data.photo)))
+        }
+        if(data.resultCode === 1)
+        {
+            dispatch(setUserData({userId: null, isAuth: null, photo: ''}))
         }
     })
 }
 
-export const login = (login, password) => (dispatch) => {
-    return authAPI.login(login, password)
+export const login = (email, password) => (dispatch) => {
+    authAPI.login(email, password).then(response => {
+        if(response.data.resultCode === 0)
+        {
+            dispatch(getAuthInfo())
+        }
+        else
+        {
+            dispatch(stopSubmit("login", {_error: response.data.messages}))
+        }
+    })
+}
+
+export const logout = () => (dispatch) => {
+    authAPI.logout().then(() => dispatch(getAuthInfo()))
 }
 
 export default authReducer

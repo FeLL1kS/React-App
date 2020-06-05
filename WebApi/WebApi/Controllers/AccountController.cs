@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
             if(User.Identity.IsAuthenticated)
             {
                 Users user = await _context.Users.FindAsync(Int32.Parse(User.Identity.Name));
-                return new ResultModel<Data> { ResultCode = 0, Data = new Data { UserId = Int32.Parse(User.Identity.Name), Email = user.Email }, Messages = "" };
+                return new ResultModel<Data> { ResultCode = 0, Data = new Data { UserId = Int32.Parse(User.Identity.Name), Email = user.Email }};
             }
             else
             {
@@ -61,7 +61,7 @@ namespace WebAPI.Controllers
                     return new ResultModel<string> { ResultCode = 0, Messages = "Successfully logged in" };
                 }
             }
-            return new ResultModel<string> { ResultCode = 1, Messages = "Incorrect model" };
+            return new ResultModel<string> { ResultCode = 1, Messages = "Incorrect email or password" };
         }
 
         [AllowAnonymous]

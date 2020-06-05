@@ -1,47 +1,30 @@
 import React from 'react'
 import classes from './Login.module.css'
-import { reduxForm, Field } from 'redux-form'
-import { login, getAuthInfo } from '../../redux/authReducer'
+import { login } from '../../redux/authReducer'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import LoginForm from './LoginForm'
 
 class Login extends React.Component {
     onSubmit = (formData) => {
         console.log(formData)
-        this.props.login(formData.login, formData.password).then(() => (this.props.getAuthInfo()))
+        this.props.login(formData.email, formData.password)
     }
 
     render()
     {
+        if(this.props.isAuth) return <Redirect to='profile' /> 
         return (
             <div className={classes.login}>
                 <h1>Login</h1>
-                <LoginReduxForm onSubmit={this.onSubmit}/>
+                <LoginForm onSubmit={this.onSubmit}/>
             </div>
         )
     }
 }
 
-let LoginForm = (props) => {
-    return (
-        <form onSubmit={props.handleSubmit}>
-            <div>
-                <Field placeholder={"Login"} component={"input"} name={"login"}/>
-            </div>                    
-            <div>
-                <Field placeholder={"Password"} component={"input"} name={"password"}/>
-            </div>
-            <div>
-                <button>Login</button>
-            </div>
-        </form>
-    )
-}
-
-let LoginReduxForm = reduxForm({ form: 'login' })(LoginForm)
-
 let mapActionToProps = {
-    login,
-    getAuthInfo   
+    login   
 }
 
 let mapStateToProps = (state) => ({
