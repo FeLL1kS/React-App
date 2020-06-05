@@ -1,20 +1,16 @@
 import React from 'react'
-import background from '../../../img/background.jpg'
 import Preloader from '../../common/preloader/Preloader'
 import classes from '../Profile.module.css'
 import user from '../../../img/User.png'
 import ProfileStatus from './ProfileStatus'
 
 let ProfileInfo = (props) => {
+    if(!props.profileIsLoaded) return <div className={classes.profileInfo}><Preloader /></div>
+    
     return (
         <>
-            <div className={classes.col}>
-                <img src={background} alt='background'></img>
-            </div>
-
-            <div className={classes.col__other + ' ' + classes.infoPanel}>
-                {
-                    props.profile === null ? <Preloader /> : 
+            <div className={classes.profileInfo + ' ' + classes.infoPanel}>
+                { 
                     <>
                     <div className={classes.avatar}>
                         <img src={props.profile.photo !== null ? props.profile.photo : user} alt={'avatar'}/>

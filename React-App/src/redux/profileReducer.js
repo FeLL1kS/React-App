@@ -3,6 +3,7 @@ import { authAPI, profileAPI } from "../api/api"
 const ADD_POST = 'ADD-POST'
 const SET_USER_PROFILE = 'SET-USER-PROFILE'
 const UPDATE_STATUS_TEXT = 'UPDATE-STATUS-TEXT'
+const LOADED_PROFILE = 'LOADED-PROFILE'
 
 let initialState = {
     postsData: [
@@ -13,7 +14,8 @@ let initialState = {
     ],
     profile: {
         contacts: { }
-    }
+    },
+    profileIsLoaded: false
 }
 
 const profileReducer = (state = initialState, action) => {
@@ -40,6 +42,11 @@ const profileReducer = (state = initialState, action) => {
                 ...state,
                 profile: {...state.profile, status: action.payload}
             }
+        case LOADED_PROFILE:
+            return {
+                ...state,
+                profileIsLoaded: !state.profileIsLoaded
+            }
         default:
             return state
     }
@@ -48,12 +55,16 @@ const profileReducer = (state = initialState, action) => {
 export const addPost = (payload) => ({ type: ADD_POST, payload })
 const setUserProfile = (payload) => ({ type: SET_USER_PROFILE, payload })
 export const updateStatusText = (payload) => ({ type: UPDATE_STATUS_TEXT, payload })
+export const profileLoaded = () => ({ type: LOADED_PROFILE })
 
 export const getProfile = (userId) => (dispatch) => {
     authAPI.me().then(data => {
         try
         {
-            profileAPI.profileInfo(userId ? userId : data.data.userId).then(data => dispatch(setUserProfile(data)))
+            profileAPI.profileInfo(userId ? userId : data.data.userId).then(data => {
+                dispatch(setUserProfile(data))
+                dispatch(profileLoaded())
+            })
         }
         catch
         {

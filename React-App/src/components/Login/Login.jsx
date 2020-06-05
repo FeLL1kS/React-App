@@ -7,7 +7,6 @@ import LoginForm from './LoginForm'
 
 class Login extends React.Component {
     onSubmit = (formData) => {
-        console.log(formData)
         this.props.login(formData.email, formData.password)
     }
 

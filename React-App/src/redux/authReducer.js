@@ -33,7 +33,7 @@ const setUserData = (payload) => ({ type: SET_USER_DATA, payload })
 const setUserPhoto = (payload) => ({ type: SET_USER_PHOTO, payload })
 
 export const getAuthInfo = () => (dispatch) => {
-    authAPI.me().then(data => {        
+    return authAPI.me().then(data => {        
         if(data.resultCode === 0)
         {
             dispatch(setUserData({...data.data, isAuth: true}))

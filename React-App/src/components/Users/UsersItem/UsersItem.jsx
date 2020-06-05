@@ -5,19 +5,6 @@ import Preloader from '../../common/preloader/Preloader'
 import { NavLink } from 'react-router-dom'
 
 const UsersItem = (props) => {
-    let printLocation = () => {
-        if(props.user.location !== null)
-        {
-            return (<div className={classes.location}>
-                        <div>{props.user.location.city},</div>
-                        <div>{props.user.location.country}</div>
-                    </div>)
-        }
-        else
-        {
-            return (<div className={classes.location}></div>)
-        }
-    }
 
     let onClickFollow = (id) => {
         props.following(id)
@@ -35,10 +22,10 @@ const UsersItem = (props) => {
                             <img className={classes.profileImg} src={(props.user.photo) != null ? props.user.photo : userPhoto } alt={props.isFetching ? <Preloader /> : null} />
                         </div>
                 </NavLink>
-                <div>
+                {props.currentUserId && <div>
                     {props.user.followed ? <button disabled={props.followingInProgress.some(id => id === props.user.id)} onClick={() => { onClickUnfollow(props.user.id) }}>Unfollow</button> 
-                    : <button disabled={props.followingInProgress.some(id => id === props.user.id) || parseInt(props.currentUserId) === props.user.id} onClick={() => { onClickFollow(props.user.id) }}>Follow</button>}
-                </div>
+                    : <button disabled={props.followingInProgress.some(id => id === props.user.id) || props.currentUserId === props.user.id} onClick={() => { onClickFollow(props.user.id) }}>Follow</button>}
+                </div>}
             </div>
             <div className={classes.infoPanel}>
                 <div className={classes.user}>
@@ -46,7 +33,11 @@ const UsersItem = (props) => {
                     <div>{props.user.status}
                 </div>
             </div>
-            {printLocation()}
+            {props.user.location && 
+            <div className={classes.location}>
+                <div>{props.user.location.city},</div>
+                <div>{props.user.location.country}</div>
+            </div>}
             </div>
         </div>
     )

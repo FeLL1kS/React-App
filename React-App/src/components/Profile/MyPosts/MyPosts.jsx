@@ -6,12 +6,11 @@ import PostForm from './PostForm';
 const MyPost = (props) => {
 
     let onSubmit = (formData) => {
-        console.log(formData);
         props.addPost(formData.newPostText)
     }
 
     return (
-        <div className={props.col__other}>
+        <div className={classes.posts}>
             <span>My posts</span>
             <div className={classes.addPost}>
                 <PostForm onSubmit={onSubmit}/>

@@ -5,3 +5,9 @@
 .addPost textarea {
     width: 100%;
 }
+
+.posts {
+    grid-area: "posts";
+    min-width: 300px;
+    padding: 1em 2em;
+}
