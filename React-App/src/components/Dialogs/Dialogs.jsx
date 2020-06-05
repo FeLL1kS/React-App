@@ -2,17 +2,12 @@ import React from 'react'
 import classes from './Dialogs.module.css'
 import DialogItem from './DialogItem/DialogItem'
 import Message from './Message/Message'
+import { Field, reduxForm } from 'redux-form'
 
 const Dialogs = (props) => {
-    const newPostElement = React.createRef();
-
-    const sendMessage = () => {
-        props.sendMessage()
-    }
-
-    const handleInputChange = e => {
-        const value = e.target.value
-        props.updateNewMessageText(value)
+    
+    const onSubmit = (formData) => {
+        props.sendMessage(formData.newMessageText)
     }
 
     return (
@@ -24,13 +19,21 @@ const Dialogs = (props) => {
             <span className={classes.border}></span>
             <div className={classes.messages}>
                 {props.dialogsPage.messagesData.map(message => <Message key={message.id} message={message} />)}
-                <div className={classes.messageBox}>
-                    <textarea placeholder="Enter your message" ref={newPostElement} value={props.dialogsPage.newMessageText} onChange={handleInputChange}></textarea>
-                    <button onClick={sendMessage}>Add</button>
-                </div>
+                <MessageReduxForm onSubmit={onSubmit}/>
             </div>
         </div>
     )
 }
+
+const MessageForm = (props) => {
+    return(
+        <form onSubmit={props.handleSubmit} className={classes.messageBox}>
+            <Field placeholder="Enter your message" component="textarea" name="newMessageText"/>
+            <button>Add</button>
+        </form>
+    )
+}
+
+const MessageReduxForm = reduxForm({form: "message"})(MessageForm)
 
 export default Dialogs

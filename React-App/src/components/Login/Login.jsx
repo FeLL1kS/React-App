@@ -1,29 +1,13 @@
 import React from 'react'
 import classes from './Login.module.css'
 import { reduxForm, Field } from 'redux-form'
-import Axios from 'axios'
+import { login, getAuthInfo } from '../../redux/authReducer'
+import { connect } from 'react-redux'
 
 class Login extends React.Component {
-    // onClickLogin = () => {
-    //     Axios.post("http://localhost:2669/api/auth/login", 
-    //     {
-    //         "Email": "oleg5420@yandex.ru",
-    //         "Password": "123456"
-    //     },
-    //     {
-    //         withCredentials: true
-    //     })
-    // } 
     onSubmit = (formData) => {
         console.log(formData)
-        Axios.post("http://localhost:2669/api/auth/login", 
-        {
-            "Email": formData.login,
-            "Password": formData.password
-        },
-        {
-            withCredentials: true
-        })
+        this.props.login(formData.login, formData.password).then(() => (this.props.getAuthInfo()))
     }
 
     render()
@@ -54,5 +38,14 @@ let LoginForm = (props) => {
 }
 
 let LoginReduxForm = reduxForm({ form: 'login' })(LoginForm)
- 
-export default Login
+
+let mapActionToProps = {
+    login,
+    getAuthInfo   
+}
+
+let mapStateToProps = (state) => ({
+    isAuth: state.auth.isAuth
+})
+
+export default connect(mapStateToProps, mapActionToProps)(Login)

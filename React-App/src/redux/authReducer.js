@@ -29,17 +29,21 @@ const authReducer = (state = initialState, action) => {
     }
 }
 
-export const setUserData = (payload) => ({ type: SET_USER_DATA, payload })
-export const setUserPhoto = (payload) => ({ type: SET_USER_PHOTO, payload })
+const setUserData = (payload) => ({ type: SET_USER_DATA, payload })
+const setUserPhoto = (payload) => ({ type: SET_USER_PHOTO, payload })
 
 export const getAuthInfo = () => (dispatch) => {
-    authAPI.me().then(data => {
+    authAPI.me().then(data => {        
         if(data.resultCode === 0)
         {
             dispatch(setUserData(data.data))
             profileAPI.profileInfo(data.data.userId).then(data => dispatch(setUserPhoto(data.photo)))
         }
     })
+}
+
+export const login = (login, password) => (dispatch) => {
+    return authAPI.login(login, password)
 }
 
 export default authReducer

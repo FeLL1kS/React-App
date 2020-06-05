@@ -1,7 +1,6 @@
 import avatar from '../img/avatar.jpg'
 
 const SEND_MESSAGE = 'SEND-MESSAGE'
-const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE-NEW-MESSAGE-TEXT'
 
 let initialState = {
     dialogsData: [
@@ -16,7 +15,6 @@ let initialState = {
         { id: '3', message: 'I\'m fine, and you?', from: 'comp', name: 'Dima Vojtovich', avatar: {avatar} },
         { id: '4', message: 'Me too', from: 'im', name: 'Oleg Vojtovich', avatar: {avatar} },
     ],
-    newMessageText: ''
 }
 
 const dialogsReducers = (state = initialState, action) => {
@@ -26,7 +24,7 @@ const dialogsReducers = (state = initialState, action) => {
         case(SEND_MESSAGE):
             let newMessage = {
                 id: '5',
-                message: state.newMessageText,
+                message: action.payload,
                 from: 'im',
                 name: "Oleg Vojtovich",
                 avatar: {avatar}
@@ -34,20 +32,12 @@ const dialogsReducers = (state = initialState, action) => {
             return {
                 ...state,
                 messagesData: [...state.messagesData, newMessage],
-                newMessageText: ''
-            }
-        case UPDATE_NEW_MESSAGE_TEXT:
-            return {
-                ...state,
-                newMessageText: action.newText
             }
         default:
             return state
     }
 }
 
-export const sendMessageCreator = () => ({ type: SEND_MESSAGE })
-
-export const updateNewMessageTextCreator = (value) => ({ type: UPDATE_NEW_MESSAGE_TEXT, newText: value })
+export const sendMessage = (payload) => ({ type: SEND_MESSAGE, payload })
 
 export default dialogsReducers

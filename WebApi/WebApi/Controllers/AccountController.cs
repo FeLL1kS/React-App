@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
 
         public class Data
         {
-            public string UserId { get; set; }
+            public int UserId { get; set; }
             public string Email { get; set; }
         }
 
@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
             if(User.Identity.IsAuthenticated)
             {
                 Users user = await _context.Users.FindAsync(Int32.Parse(User.Identity.Name));
-                return new ResultModel<Data> { ResultCode = 0, Data = new Data { UserId = User.Identity.Name, Email = user.Email }, Messages = "" };
+                return new ResultModel<Data> { ResultCode = 0, Data = new Data { UserId = Int32.Parse(User.Identity.Name), Email = user.Email }, Messages = "" };
             }
             else
             {
@@ -49,7 +49,7 @@ namespace WebAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<Users>> Login(LoginModel model)
+        public async Task<ActionResult<ResultModel<string>>> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
@@ -58,15 +58,15 @@ namespace WebAPI.Controllers
                 {
                     await Authenticate(user.Id.ToString());
 
-                    return user;
+                    return new ResultModel<string> { ResultCode = 0, Messages = "Successfully logged in" };
                 }
             }
-            return NotFound();
+            return new ResultModel<string> { ResultCode = 1, Messages = "Incorrect model" };
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<Users>> Register(RegisterModel model)
+        public async Task<ActionResult<ResultModel<Data>>> Register(RegisterModel model)
         {
             if (ModelState.IsValid)
             {
@@ -100,12 +100,26 @@ namespace WebAPI.Controllers
 
                     await Authenticate(user.Id.ToString());
 
-                    return CreatedAtAction("Register", new { id = user.Id }, user);
+                    return new ResultModel<Data>
+                    {
+                        ResultCode = 0,
+                        Messages = "Successful registered",
+                        Data = { Email = user.Email, UserId = user.Id }
+                    };
                 }
                 else
-                    return NotFound();
+                    return new ResultModel<Data>
+                    {
+                        ResultCode = 1,
+                        Messages = "This e-mail is already in use",
+                        Data = { Email = user.Email }
+                    };
             }
-            return BadRequest();
+            return new ResultModel<Data>
+            {
+                ResultCode = 10,
+                Messages = "Incorrect model"
+            };
         }
 
         private async Task Authenticate(string userId)
@@ -119,10 +133,17 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("logout")]
-        public async Task<string> Logout()
+        public async Task<ResultModel<string>> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return "Logout Success";
+            try
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return new ResultModel<string> { ResultCode = 0, Messages = "Logout Successful" };
+            }
+            catch
+            {
+                return new ResultModel<string> { ResultCode = 1, Messages = "Unexpected Error" };
+            }
         }
     }
 }
