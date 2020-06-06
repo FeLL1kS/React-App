@@ -73,7 +73,9 @@ export const getProfile = (userId) => (dispatch) => {
 }
 
 export const changeStatus = (status) => (dispatch) => {
-    profileAPI.changeStatus(status)
+    profileAPI.changeStatus(status).then(() => {
+        dispatch(updateStatusText(status))
+    })
 }
 
 export default profileReducer

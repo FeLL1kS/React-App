@@ -2,7 +2,7 @@ import React from 'react'
 import Preloader from '../../common/preloader/Preloader'
 import classes from '../Profile.module.css'
 import user from '../../../img/User.png'
-import ProfileStatus from './ProfileStatus'
+import ProfileStatusWithHooks from './ProfileStatusWithHooks'
 
 let ProfileInfo = (props) => {
     if(!props.profileIsLoaded) return <div className={classes.profileInfo}><Preloader /></div>
@@ -18,9 +18,9 @@ let ProfileInfo = (props) => {
                     <div className={classes.mainInfo}>
                         <ul>
                             <li><div>{props.profile.fullName}</div></li>
-                            <li><ProfileStatus  status={props.profile.status} updateStatusText={props.updateStatusText} 
-                                                changeStatus={props.changeStatus} currentUser={props.currentUser}
-                                                requestedUser={props.profile.userId}/></li>
+                            <li><ProfileStatusWithHooks  status={props.profile.status} updateStatusText={props.updateStatusText} 
+                                                        changeStatus={props.changeStatus} currentUser={props.currentUser}
+                                                        requestedUser={props.profile.userId}/></li>
                             <li>{props.profile.lookingForAJob ? <div>Ищет работу</div> : <div>Не ищет работу</div>}</li>
                             {props.profile.lookingForAJobDescription !== null && <li><div>{props.profile.lookingForAJobDescription}</div></li>}
                         </ul>

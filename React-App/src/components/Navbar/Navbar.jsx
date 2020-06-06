@@ -4,7 +4,7 @@ import NavItem from './NavItem/NavItem';
 
 const Navbar = () => {
     return (
-        <nav className={classes.nav}>
+        <nav className={classes.nav + ' block'}>
             <div>
                 <NavItem to = "Profile" icon = "fa-home"/>
                 <NavItem to = "Dialogs" icon = "fa-comments"/>

@@ -14,9 +14,15 @@
 
 .app-wraper-content {
   grid-area: content;
+}
+
+.block {
   background-color: white;
+  /* padding: 1em 2em; */
   border-radius: 10px;
-  height: 100%;
+  min-width: 300px;
+  height: auto;
+  box-shadow: 0 0 1px rgba(0,0,0,0.4);
 }
 
 textarea {
