@@ -5,7 +5,7 @@ import user from '../../../img/User.png'
 import ProfileStatusWithHooks from './ProfileStatusWithHooks'
 
 let ProfileInfo = (props) => {
-    if(!props.profileIsLoaded) return <div className={classes.profileInfo}><Preloader /></div>
+    if(!props.profileIsLoaded) return <div className={classes.loading}><Preloader /></div>
     
     return (
         <>

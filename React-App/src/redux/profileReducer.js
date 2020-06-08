@@ -57,25 +57,23 @@ const setUserProfile = (payload) => ({ type: SET_USER_PROFILE, payload })
 export const updateStatusText = (payload) => ({ type: UPDATE_STATUS_TEXT, payload })
 export const profileLoaded = () => ({ type: LOADED_PROFILE })
 
-export const getProfile = (userId) => (dispatch) => {
-    authAPI.me().then(data => {
-        try
-        {
-            profileAPI.profileInfo(userId ? userId : data.data.userId).then(data => {
-                dispatch(setUserProfile(data))
-                dispatch(profileLoaded())
-            })
-        }
-        catch
-        {
-        }
-    })
+export const getProfile = (userId) => async (dispatch) => {
+    let data = await authAPI.me()
+    try
+    {
+        profileAPI.profileInfo(userId ? userId : data.data.userId).then(data => {
+            dispatch(setUserProfile(data))
+            dispatch(profileLoaded())
+        })
+    }
+    catch
+    {
+    }
 }
 
-export const changeStatus = (status) => (dispatch) => {
-    profileAPI.changeStatus(status).then(() => {
-        dispatch(updateStatusText(status))
-    })
+export const changeStatus = (status) => async (dispatch) => {
+    await profileAPI.changeStatus(status)
+    dispatch(updateStatusText(status))
 }
 
 export default profileReducer

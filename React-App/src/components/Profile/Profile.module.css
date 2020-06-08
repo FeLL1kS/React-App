@@ -10,8 +10,12 @@
   min-width: 300px;
   padding: 1em 2em;
   align-self: center;
-  display: grid;
+}
+
+.loading {
+  display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 /* ProfileInfo */

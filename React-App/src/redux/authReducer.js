@@ -32,35 +32,34 @@ const authReducer = (state = initialState, action) => {
 const setUserData = (payload) => ({ type: SET_USER_DATA, payload })
 const setUserPhoto = (payload) => ({ type: SET_USER_PHOTO, payload })
 
-export const getAuthInfo = () => (dispatch) => {
-    return authAPI.me().then(data => {        
-        if(data.resultCode === 0)
-        {
-            dispatch(setUserData({...data.data, isAuth: true}))
-            profileAPI.profileInfo(data.data.userId).then(data => dispatch(setUserPhoto(data.photo)))
-        }
-        if(data.resultCode === 1)
-        {
-            dispatch(setUserData({userId: null, isAuth: null, photo: ''}))
-        }
-    })
+export const getAuthInfo = () => async (dispatch) => {
+    let data = await authAPI.me()   
+    if(data.resultCode === 0)
+    {
+        dispatch(setUserData({...data.data, isAuth: true}))
+        profileAPI.profileInfo(data.data.userId).then(data => dispatch(setUserPhoto(data.photo)))
+    }
+    if(data.resultCode === 1)
+    {
+        dispatch(setUserData({userId: null, isAuth: null, photo: ''}))
+    }
 }
 
-export const login = (email, password) => (dispatch) => {
-    authAPI.login(email, password).then(response => {
-        if(response.data.resultCode === 0)
-        {
-            dispatch(getAuthInfo())
-        }
-        else
-        {
-            dispatch(stopSubmit("login", {_error: response.data.messages}))
-        }
-    })
+export const login = (email, password) => async (dispatch) => {
+    let response = await authAPI.login(email, password)
+    if(response.data.resultCode === 0)
+    {
+        dispatch(getAuthInfo())
+    }
+    else
+    {
+        dispatch(stopSubmit("login", {_error: response.data.messages}))
+    }
 }
 
-export const logout = () => (dispatch) => {
-    authAPI.logout().then(() => dispatch(getAuthInfo()))
+export const logout = () => async (dispatch) => {
+    await authAPI.logout()
+    dispatch(getAuthInfo())
 }
 
 export default authReducer

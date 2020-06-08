@@ -10,6 +10,7 @@ class ProfileContainer extends React.Component {
     componentDidMount()
     {        
         this.props.getProfile(this.props.match.params.userId)
+        
     }
 
     componentWillUnmount()
