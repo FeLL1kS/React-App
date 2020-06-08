@@ -1,0 +1,43 @@
+.image {
+    width: 50px;
+}
+
+.point span {
+    cursor: pointer;
+}
+
+ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.pagination li {display: inline;}
+
+ul.pagination li span {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+}
+
+.pagination li:first-child span {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.pagination li:last-child span {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+ul.pagination li span.active {
+    background-color: #6767e0;
+    color: white;
+    border: 1px solid #6767e0;
+}
+
+ul.pagination li span:hover:not(.active) {background-color: #ddd;}
+
