@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
     public class ProfilesController : ControllerBase
     {
         private readonly SNDBContext _context;
-        IWebHostEnvironment _appEnvironment;
+        readonly IWebHostEnvironment _appEnvironment;
 
         public ProfilesController(SNDBContext context, IWebHostEnvironment appEnvironment)
         {
@@ -87,7 +87,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ProfileModel>> PutProfile(ProfileModel profile)
+        public async Task<ResultModel<ProfileModel>> PutProfile(ProfileModel profile)
         {
             profile.UserId = Int32.Parse(User.Identity.Name);
             
@@ -104,11 +104,11 @@ namespace WebAPI.Controllers
             _context.Users.Update(user);
             _context.Profiles.Update(pr);
             await _context.SaveChangesAsync();
-            return profile;
+            return new ResultModel<ProfileModel> { ResultCode = 0, Messages = "Profile data changed", Data = profile };
         }
 
         [HttpPut("photo")]
-        public async Task<string> PutPhoto([FromForm] FileUploadAPI objFile)
+        public async Task<ResultModel<string>> PutPhoto([FromForm] FileUploadAPI objFile)
         {
             try
             {
@@ -160,22 +160,22 @@ namespace WebAPI.Controllers
                         }
                         user.PhotoId = photo.Id;
                         await _context.SaveChangesAsync();
-                        return "\\Upload\\" + nameAndExtension[0] + '.' + nameAndExtension[1];
+                        return new ResultModel<string> { ResultCode = 0, Messages = "Upload", Data = photo.FilePath };
                     }
                 }
                 else
                 {
-                    return "Failed";
+                    return new ResultModel<string> { ResultCode = 1, Messages = "There are no files" };
                 }
             }
             catch (Exception ex)
             {
-                return ex.Message.ToString();
+                return new ResultModel<string> { ResultCode = 10, Messages = ex.ToString() };
             }
         }
 
         [HttpPut("status")]
-        public async Task<string> PutStatus(StatusModel status)
+        public async Task<ResultModel<string>> PutStatus(StatusModel status)
         {
             try
             {
@@ -183,28 +183,28 @@ namespace WebAPI.Controllers
                 user.Status = status.Status;
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
-                return "Status is changed";
+                return new ResultModel<string> { ResultCode = 1, Messages = "Status is changed", Data = user.Status };
             }
             catch(Exception ex)
             {
-                return ex.ToString();
+                return new ResultModel<string> { ResultCode = 1, Messages = ex.ToString() };
             }
         }
 
-        // DELETE: api/Profiles/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Profile>> DeleteProfile(int id)
-        {
-            var profile = await _context.Profiles.FindAsync(id);
-            if (profile == null)
-            {
-                return NotFound();
-            }
+        //// DELETE: api/Profiles/5
+        //[HttpDelete("{id}")]
+        //public async Task<ResultModel<Profile>> DeleteProfile(int id)
+        //{
+        //    Profile profile = await _context.Profiles.FindAsync(id);
+        //    if (profile == null)
+        //    {
+        //        return new ResultModel<Profile> { ResultCode = 1, Messages = "Profile not found" };
+        //    }
 
-            _context.Profiles.Remove(profile);
-            await _context.SaveChangesAsync();
+        //    _context.Profiles.Remove(profile);
+        //    await _context.SaveChangesAsync();
 
-            return profile;
-        }
+        //    return new ResultModel<Profile> { ResultCode = 0, Messages = "Profile removed", Data = profile };
+        //}
     }
 }

@@ -10,7 +10,7 @@ let ProfileStatusWithHooks = (props) => {
     }, [props.status])
 
     let enableEditMode = () => {
-        if(parseInt(props.currentUser) === props.requestedUser)
+        if(props.isOwner)
         {
             setEditMode(true)
         }

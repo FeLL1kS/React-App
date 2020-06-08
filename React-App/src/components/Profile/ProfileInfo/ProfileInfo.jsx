@@ -5,7 +5,16 @@ import user from '../../../img/User.png'
 import ProfileStatusWithHooks from './ProfileStatusWithHooks'
 
 let ProfileInfo = (props) => {
-    if(!props.profileIsLoaded) return <div className={classes.loading}><Preloader /></div>
+    
+    let savePhoto = e => {
+        if(e.target.files.length) {
+            props.savePhoto(e.target.files[0])
+        }
+    }
+
+    let isOwner = props.profile.userId === props.currentUser
+    
+    if(!props.profileIsLoaded) return <div className="preloader"><Preloader /></div>
     
     return (
         <>
@@ -13,14 +22,23 @@ let ProfileInfo = (props) => {
                 { 
                     <>
                     <div className={classes.avatar}>
+                        {isOwner && <>
+                                        <span className={classes.mask}/>
+                                        <div className={classes.fileUpload}>
+                                            <label className={classes.label}>
+                                                <i class="fa fa-upload" aria-hidden="true"></i>
+                                                <span className={classes.title}>Обновить фотографию</span>
+                                                <input type="file" onChange={savePhoto}/>
+                                            </label>
+                                        </div>
+                                    </>}
                         <img src={props.profile.photo !== null ? props.profile.photo : user} alt={'avatar'}/>
                     </div>
                     <div className={classes.mainInfo}>
                         <ul>
                             <li><div>{props.profile.fullName}</div></li>
                             <li><ProfileStatusWithHooks  status={props.profile.status} updateStatusText={props.updateStatusText} 
-                                                        changeStatus={props.changeStatus} currentUser={props.currentUser}
-                                                        requestedUser={props.profile.userId}/></li>
+                                                        changeStatus={props.changeStatus} isOwner={isOwner}/></li>
                             <li>{props.profile.lookingForAJob ? <div>Ищет работу</div> : <div>Не ищет работу</div>}</li>
                             {props.profile.lookingForAJobDescription !== null && <li><div>{props.profile.lookingForAJobDescription}</div></li>}
                         </ul>

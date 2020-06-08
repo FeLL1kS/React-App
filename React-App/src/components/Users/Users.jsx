@@ -11,8 +11,8 @@ let Users = (props) => {
             <div className={classes.pagination}>
                 <Pagination onPageChanged={props.onPageChanged} totalItems={props.totalPages} currentPage={props.currentPage}/>
             </div>
-            {props.isFetching ? <Preloader /> : null}
-            { props.users.map(u => (<UsersItem  isFetching={props.isFetching} 
+            {props.isFetching ? <div className="preloader"><Preloader /></div> : null}
+            {props.users.map(u => (<UsersItem  isFetching={props.isFetching} 
                                                 key={u.id}  
                                                 user={u} 
                                                 following={props.following} 

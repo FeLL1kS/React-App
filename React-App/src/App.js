@@ -17,6 +17,7 @@ import HeaderContainer from './components/Header/HeaderContainer';
 import Login from './components/Login/Login';
 import { connect } from 'react-redux';
 import { initializing } from './redux/appReducer';
+import Preloader from './components/common/preloader/Preloader';
 
 class App extends React.Component  {
   componentDidMount()
@@ -27,7 +28,7 @@ class App extends React.Component  {
   render()
   {
     if(!this.props.initialized)
-      return <div></div>  
+      return <div className="preloader"><Preloader /><div>Loading...</div></div>
 
     return (
         <div className='app-wrapper'>

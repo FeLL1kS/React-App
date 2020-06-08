@@ -1,9 +1,11 @@
 import { authAPI, profileAPI } from "../api/api"
+import { getAuthInfo } from "./authReducer"
 
 const ADD_POST = 'ADD-POST'
 const SET_USER_PROFILE = 'SET-USER-PROFILE'
 const UPDATE_STATUS_TEXT = 'UPDATE-STATUS-TEXT'
 const LOADED_PROFILE = 'LOADED-PROFILE'
+const SAVE_PHOTO_SUCCESS = 'SAVE-PHOTO-SUCCESS'
 
 let initialState = {
     postsData: [
@@ -45,7 +47,12 @@ const profileReducer = (state = initialState, action) => {
         case LOADED_PROFILE:
             return {
                 ...state,
-                profileIsLoaded: !state.profileIsLoaded
+                profileIsLoaded: action.payload
+            }
+        case SAVE_PHOTO_SUCCESS:
+            return {
+                ...state,
+                profile: {...state.profile, photo: action.payload}
             }
         default:
             return state
@@ -55,15 +62,17 @@ const profileReducer = (state = initialState, action) => {
 export const addPost = (payload) => ({ type: ADD_POST, payload })
 const setUserProfile = (payload) => ({ type: SET_USER_PROFILE, payload })
 export const updateStatusText = (payload) => ({ type: UPDATE_STATUS_TEXT, payload })
-export const profileLoaded = () => ({ type: LOADED_PROFILE })
+export const profileLoaded = (payload) => ({ type: LOADED_PROFILE, payload })
+export const savePhotoSuccess = (payload) => ({ type: SAVE_PHOTO_SUCCESS, payload })
 
 export const getProfile = (userId) => async (dispatch) => {
+    dispatch(profileLoaded(false))
     let data = await authAPI.me()
     try
     {
         profileAPI.profileInfo(userId ? userId : data.data.userId).then(data => {
             dispatch(setUserProfile(data))
-            dispatch(profileLoaded())
+            dispatch(profileLoaded(true))
         })
     }
     catch
@@ -74,6 +83,15 @@ export const getProfile = (userId) => async (dispatch) => {
 export const changeStatus = (status) => async (dispatch) => {
     await profileAPI.changeStatus(status)
     dispatch(updateStatusText(status))
+}
+
+export const savePhoto = (file) => async (dispatch) => {
+    dispatch(profileLoaded(false))
+    let response = await profileAPI.changeProfilePhoto(file)
+    console.log(response.data.data);
+    dispatch(savePhotoSuccess(response.data.data))
+    dispatch(getAuthInfo())
+    dispatch(profileLoaded(true))
 }
 
 export default profileReducer

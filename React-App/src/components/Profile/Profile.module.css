@@ -27,14 +27,35 @@
    "contacts contacts";
 }
 
+.mask {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  background: rgba(0,0,0,.5);  
+  opacity: 0;
+}
+
 .avatar {
+  position: relative;
+  display: block;
   grid-area: avatar;
-  width: 240px;
+  width: 200px;
+  max-height: 260px;
+}
+
+.avatar:hover .fileUpload {
+  display: block;
+}
+
+.avatar:hover .mask {
+  opacity: 1;
 }
 
 .avatar img {
-  max-height: 300px;
-  max-width: 240px;
+  max-width: 200px;
+  max-height: 260px;
 }
 
 .mainInfo {
@@ -43,4 +64,52 @@
 
 .contacts {
   grid-area: contacts;
+}
+
+/*  */
+
+.fileUpload {
+  position: absolute;
+  display: none;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.fileUpload input[type=file] {
+  outline:0;
+  opacity:0;
+  pointer-events:none;
+  user-select:none
+}
+
+.fileUpload .label {
+  width:120px;
+  height: 100px;
+  border:2px dashed #c4b9b9;
+  border-radius:5px;
+  display:block;
+  padding:1.2em;
+  transition:border 300ms ease;
+  cursor:pointer;
+  text-align:center
+}
+
+.fileUpload .label i {
+  display:block;
+  font-size:42px;
+  padding-bottom:16px
+}
+
+.fileUpload .label i,.fileUpload .label .title {
+  color:#c4b9b9;
+  transition:200ms color
+}
+
+.fileUpload .label:hover {
+  border:2px solid #fff
+}
+
+.fileUpload .label:hover i,.fileUpload .label:hover .title {
+  color:#fff
 }

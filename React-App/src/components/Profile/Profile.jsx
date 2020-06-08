@@ -8,7 +8,7 @@ const Profile = (props) => {
         <div className={classes.profile}>
             <ProfileInfo    profile={props.profile} updateStatusText={props.updateStatusText} 
                             changeStatus={props.changeStatus} currentUser={props.currentUser}
-                            profileIsLoaded={props.profileIsLoaded}/>
+                            profileIsLoaded={props.profileIsLoaded} savePhoto={props.savePhoto}/>
             <MyPostsContainer col__other={classes.col__other}/>
         </div>
     )
