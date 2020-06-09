@@ -2,22 +2,23 @@ import React from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { Input } from '../common/FormControls/FormControls'
 import { required } from '../utils/validators/validators'
-import classes from '../common/FormControls/FormControls.module.css'
+import inheritedClasses from '../common/FormControls/FormControls.module.css'
+import classes from './Login.module.css'
 
 let LoginForm = (props) => {
     return (
-        <form onSubmit={props.handleSubmit}>
-            <div>
-                <Field placeholder="Email" component={Input} name="email" validate={[required]}/>
+        <form className={classes.loginForm} onSubmit={props.handleSubmit}>
+            <div className={classes.inputForm}>
+                <Field placeholder="Email" component={Input} name="email" type="text" validate={[required]}/>
             </div>                    
-            <div>
+            <div className={classes.inputForm}>
                 <Field placeholder="Password" component={Input} name="password" type="password" validate={[required]}/>
             </div>
-            {props.error && <div className={classes.formError}>
+            {props.error && <div className={inheritedClasses.formError}>
                 {props.error}
             </div>}
-            <div>
-                <button>Login</button>
+            <div className={classes.inputForm}>
+                <Field component={Input} type="submit" name="submit"/>
             </div>
         </form>
     )

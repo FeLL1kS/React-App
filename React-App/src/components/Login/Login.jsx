@@ -15,7 +15,6 @@ class Login extends React.Component {
         if(this.props.isAuth) return <Redirect to='profile' /> 
         return (
             <div className={classes.login}>
-                <h1>Login</h1>
                 <LoginForm onSubmit={this.onSubmit}/>
             </div>
         )

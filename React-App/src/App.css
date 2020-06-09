@@ -14,6 +14,7 @@
 
 .app-wraper-content {
   grid-area: content;
+  position: relative;
 }
 
 .block {
