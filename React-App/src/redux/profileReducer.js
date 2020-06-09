@@ -88,10 +88,14 @@ export const changeStatus = (status) => async (dispatch) => {
 export const savePhoto = (file) => async (dispatch) => {
     dispatch(profileLoaded(false))
     let response = await profileAPI.changeProfilePhoto(file)
-    console.log(response.data.data);
     dispatch(savePhotoSuccess(response.data.data))
     dispatch(getAuthInfo())
     dispatch(profileLoaded(true))
+}
+
+export const saveProfileData = (profile) => async (dispatch, getState) => {
+    await profileAPI.changeProfileData(profile)
+    dispatch(getProfile(getState().auth.userId))
 }
 
 export default profileReducer

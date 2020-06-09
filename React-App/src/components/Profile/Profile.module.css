@@ -1,12 +1,12 @@
 .profile {
   display: grid;
-  gap: 10px;
   grid-template-columns: 50%;
   grid-template-areas: "profileInfo posts"; 
 }
 
 .profileInfo {
   grid-area: "profileInfo";
+  width: 450px;
   min-width: 300px;
   padding: 1em 2em;
   align-self: center;
@@ -35,6 +35,7 @@
   bottom: 0; 
   background: rgba(0,0,0,.5);  
   opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .avatar {
@@ -54,12 +55,13 @@
 }
 
 .avatar img {
-  max-width: 200px;
-  max-height: 260px;
+  width: 200px;
+  height: 260px;
 }
 
 .mainInfo {
   grid-area: mainInfo;
+  width: 250px;
 }
 
 .contacts {

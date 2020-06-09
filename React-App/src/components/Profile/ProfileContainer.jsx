@@ -1,7 +1,7 @@
 import React from 'react'
 import Profile from './Profile'
 import { connect } from 'react-redux'
-import { getProfile, updateStatusText, changeStatus, profileLoaded, savePhoto } from '../../redux/profileReducer'
+import { getProfile, updateStatusText, changeStatus, profileLoaded, savePhoto, saveProfileData } from '../../redux/profileReducer'
 import { withRouter, Redirect } from 'react-router-dom'
 import { compose } from 'redux'
 
@@ -26,7 +26,7 @@ class ProfileContainer extends React.Component {
         }
         else
         {
-            return <Profile {...this.props} profile={this.props.profile} profileIsLoaded={this.props.profileIsLoaded} />
+            return <Profile {...this.props} profile={this.props.profile} profileIsLoaded={this.props.profileIsLoaded} saveProfileData={this.props.saveProfileData} />
         }
     }
     
@@ -43,7 +43,8 @@ let mapActionToProps = {
     changeStatus,
     updateStatusText,
     profileLoaded,
-    savePhoto
+    savePhoto,
+    saveProfileData
 }
 
 export default compose(

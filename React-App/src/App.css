@@ -46,3 +46,14 @@ textarea {
   background:#ecf0f1;
   color:rgb(52, 73, 94); */
 }
+
+/* input[type="text"] { 
+  border: 1px solid #848484; 
+  -webkit-border-radius: 30px; 
+  -moz-border-radius: 30px; 
+  border-radius: 30px; 
+  outline:0; 
+  height:25px; 
+  padding-left:10px; 
+  padding-right:10px; 
+} */

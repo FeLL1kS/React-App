@@ -3,13 +3,22 @@ import Preloader from '../../common/preloader/Preloader'
 import classes from '../Profile.module.css'
 import user from '../../../img/User.png'
 import ProfileStatusWithHooks from './ProfileStatusWithHooks'
+import { useState } from 'react'
+import ProfileDataForm from './ProfileDataForm'
 
 let ProfileInfo = (props) => {
     
+    const [editMode, setEditMode] = useState(false)
+
     let savePhoto = e => {
         if(e.target.files.length) {
             props.savePhoto(e.target.files[0])
         }
+    }
+
+    let onSubmit = (formData) => {
+        props.saveProfileData(formData)
+        setEditMode(false)
     }
 
     let isOwner = props.profile.userId === props.currentUser
@@ -26,7 +35,7 @@ let ProfileInfo = (props) => {
                                         <span className={classes.mask}/>
                                         <div className={classes.fileUpload}>
                                             <label className={classes.label}>
-                                                <i class="fa fa-upload" aria-hidden="true"></i>
+                                                <i className="fa fa-upload" aria-hidden="true"></i>
                                                 <span className={classes.title}>Обновить фотографию</span>
                                                 <input type="file" onChange={savePhoto}/>
                                             </label>
@@ -34,31 +43,44 @@ let ProfileInfo = (props) => {
                                     </>}
                         <img src={props.profile.photo !== null ? props.profile.photo : user} alt={'avatar'}/>
                     </div>
-                    <div className={classes.mainInfo}>
-                        <ul>
-                            <li><div>{props.profile.fullName}</div></li>
-                            <li><ProfileStatusWithHooks  status={props.profile.status} updateStatusText={props.updateStatusText} 
-                                                        changeStatus={props.changeStatus} isOwner={isOwner}/></li>
-                            <li>{props.profile.lookingForAJob ? <div>Ищет работу</div> : <div>Не ищет работу</div>}</li>
-                            {props.profile.lookingForAJobDescription !== null && <li><div>{props.profile.lookingForAJobDescription}</div></li>}
-                        </ul>
-                        
-                    </div>
-                    <div className={classes.contacts}>
-                        <div style={{fontWeight:'bold'}}>Контакты</div>
-                        <div>github: <a href={props.profile.contacts.github}>{props.profile.contacts.github}</a></div>
-                        <div>vk: <a href={props.profile.contacts.vk}>{props.profile.contacts.vk}</a></div>
-                        <div>facebook: <a href={props.profile.contacts.facebook}>{props.profile.contacts.facebook}</a></div>
-                        <div>instagram: <a href={props.profile.contacts.instagram}>{props.profile.contacts.instagram}</a></div>
-                        <div>twitter: <a href={props.profile.contacts.twitter}>{props.profile.contacts.twitter}</a></div>
-                        <div>website: <a href={props.profile.contacts.website}>{props.profile.contacts.website}</a></div>
-                        <div>youtube: <a href={props.profile.contacts.youtube}>{props.profile.contacts.youtube}</a></div>
-                    </div>
+                    {!editMode 
+                    ? <ProfileData editMode={editMode} goToEditMode={() => setEditMode(true)} profile={props.profile} updateStatusText={props.updateStatusText} changeStatus={props.changeStatus} isOwner={isOwner}/>
+                    : <ProfileDataForm initialValues={props.profile} onSubmit={onSubmit} profile={props.profile} updateStatusText={props.updateStatusText} changeStatus={props.changeStatus} isOwner={isOwner}/>
+                    }
                     </>
                 }
             </div>
         </>
     )
 }
+
+const ProfileData = ({profile, updateStatusText, changeStatus, isOwner, goToEditMode}) => {
+    return  (
+    <>
+        {isOwner && <button onClick={goToEditMode}>Edit</button>}
+        <div className={classes.mainInfo}>
+            <ul>
+                <li><div>{profile.fullName}</div></li>
+                <li><ProfileStatusWithHooks  status={profile.status} updateStatusText={updateStatusText} 
+                                            changeStatus={changeStatus} isOwner={isOwner}/></li>
+                <li>{profile.lookingForAJob ? <div>Ищет работу</div> : <div>Не ищет работу</div>}</li>
+                {profile.lookingForAJobDescription !== null && <li><div>{profile.lookingForAJobDescription}</div></li>}
+            </ul>
+            
+        </div>
+        <div className={classes.contacts}>
+            <div style={{fontWeight:'bold'}}>Контакты</div>
+            {Object.keys(profile.contacts).map(key => {
+                return key !== 'id' &&
+                <Contact key={key} contactKey={key} contactValue={profile.contacts[key]}/>
+            })}
+        </div>
+    </>)
+}
+
+const Contact = ({contactKey, contactValue}) => {
+    return <div>{contactKey}: <a href={contactValue}>{contactValue}</a></div>
+}
+
 
 export default ProfileInfo
