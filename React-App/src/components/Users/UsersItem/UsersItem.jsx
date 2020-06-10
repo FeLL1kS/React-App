@@ -22,9 +22,9 @@ const UsersItem = (props) => {
                             <img className={classes.profileImg} src={(props.user.photo) != null ? props.user.photo : userPhoto } alt={props.isFetching ? <Preloader /> : null} />
                         </div>
                 </NavLink>
-                {props.currentUserId && <div>
-                    {props.user.followed ? <button disabled={props.followingInProgress.some(id => id === props.user.id)} onClick={() => { onClickUnfollow(props.user.id) }}>Unfollow</button> 
-                    : <button disabled={props.followingInProgress.some(id => id === props.user.id) || props.currentUserId === props.user.id} onClick={() => { onClickFollow(props.user.id) }}>Follow</button>}
+                {props.currentUserId !== props.user.id && props.currentUserId && <div>
+                    {props.user.followed ? <button className={classes.followButton} disabled={props.followingInProgress.some(id => id === props.user.id)} onClick={() => { onClickUnfollow(props.user.id) }}>Unfollow</button> 
+                    : <button className={classes.followButton} disabled={props.followingInProgress.some(id => id === props.user.id) || props.currentUserId === props.user.id} onClick={() => { onClickFollow(props.user.id) }}>Follow</button>}
                 </div>}
             </div>
             <div className={classes.infoPanel}>

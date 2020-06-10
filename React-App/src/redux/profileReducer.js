@@ -65,12 +65,22 @@ export const updateStatusText = (payload) => ({ type: UPDATE_STATUS_TEXT, payloa
 export const profileLoaded = (payload) => ({ type: LOADED_PROFILE, payload })
 export const savePhotoSuccess = (payload) => ({ type: SAVE_PHOTO_SUCCESS, payload })
 
-export const getProfile = (userId) => async (dispatch) => {
-    dispatch(profileLoaded(false))
+export const getProfile = async (userId) => {
     let data = await authAPI.me()
     try
     {
-        profileAPI.profileInfo(userId ? userId : data.data.userId).then(data => {
+        return profileAPI.profileInfo(userId ? userId : data.data.userId).then(data => data)
+    }
+    catch
+    {
+    }
+}
+
+export const setProfile = (userId) => async (dispatch) => {
+    dispatch(profileLoaded(false))
+    try
+    {
+        getProfile(userId).then(data => {
             dispatch(setUserProfile(data))
             dispatch(profileLoaded(true))
         })
@@ -93,9 +103,8 @@ export const savePhoto = (file) => async (dispatch) => {
     dispatch(profileLoaded(true))
 }
 
-export const saveProfileData = (profile) => async (dispatch, getState) => {
+export const saveProfileData = (profile) => async (dispatch) => {
     await profileAPI.changeProfileData(profile)
-    dispatch(getProfile(getState().auth.userId))
 }
 
 export default profileReducer

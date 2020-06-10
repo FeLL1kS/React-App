@@ -3,22 +3,14 @@ import Preloader from '../../common/preloader/Preloader'
 import classes from '../Profile.module.css'
 import user from '../../../img/User.png'
 import ProfileStatusWithHooks from './ProfileStatusWithHooks'
-import { useState } from 'react'
-import ProfileDataForm from './ProfileDataForm'
+import { NavLink } from 'react-router-dom'
 
 let ProfileInfo = (props) => {
     
-    const [editMode, setEditMode] = useState(false)
-
     let savePhoto = e => {
         if(e.target.files.length) {
             props.savePhoto(e.target.files[0])
         }
-    }
-
-    let onSubmit = (formData) => {
-        props.saveProfileData(formData)
-        setEditMode(false)
     }
 
     let isOwner = props.profile.userId === props.currentUser
@@ -43,10 +35,7 @@ let ProfileInfo = (props) => {
                                     </>}
                         <img src={props.profile.photo !== null ? props.profile.photo : user} alt={'avatar'}/>
                     </div>
-                    {!editMode 
-                    ? <ProfileData editMode={editMode} goToEditMode={() => setEditMode(true)} profile={props.profile} updateStatusText={props.updateStatusText} changeStatus={props.changeStatus} isOwner={isOwner}/>
-                    : <ProfileDataForm initialValues={props.profile} onSubmit={onSubmit} profile={props.profile} updateStatusText={props.updateStatusText} changeStatus={props.changeStatus} isOwner={isOwner}/>
-                    }
+                    <ProfileData profile={props.profile} updateStatusText={props.updateStatusText} changeStatus={props.changeStatus} isOwner={isOwner}/>
                     </>
                 }
             </div>
@@ -57,7 +46,7 @@ let ProfileInfo = (props) => {
 const ProfileData = ({profile, updateStatusText, changeStatus, isOwner, goToEditMode}) => {
     return  (
     <>
-        {isOwner && <button onClick={goToEditMode}>Edit</button>}
+        {isOwner && <NavLink to='edit'>Edit</NavLink>}
         <div className={classes.mainInfo}>
             <ul>
                 <li><div>{profile.fullName}</div></li>

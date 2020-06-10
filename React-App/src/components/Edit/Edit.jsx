@@ -1,14 +1,15 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { required } from '../../utils/validators/validators'
-import { Input } from '../../common/FormControls/FormControls'
-import classes from '../Profile.module.css'
+import { required } from '../utils/validators/validators'
+import { Input } from '../common/FormControls/FormControls'
+import classes from './Edit.module.css'
 
-const ProfileDataForm = ({profile, handleSubmit, onSubmit}) => {
-    return  (
-    <>
-        <form className={classes.contacts} onSubmit={handleSubmit}>
-            <button onSubmit={onSubmit}>Save</button>
+
+const Edit = ({profile, handleSubmit, onSubmit, profileIsLoaded}) => {
+
+    return(
+    <div className={classes.settings}>
+        <form onSubmit={handleSubmit}>
             <div>
                 <b>Full Name: </b><Field placeholder="Full Name" component={Input} name="fullName" validate={[required]}/>
             </div>
@@ -19,14 +20,15 @@ const ProfileDataForm = ({profile, handleSubmit, onSubmit}) => {
                 <b>Looking for a job description: </b><Field placeholder="Decsription" component={Input} name="lookingForAJobDescription" validate={[required]}/>
             </div>
 
-            {Object.keys(profile.contacts).map(key => {
+            {profile.contacts.instagram && Object.keys(profile.contacts).map(key => {
                 return key !== 'id' &&
                 <div key={key}>
                     <b>{key}: </b><Field placeholder={key} component={Input} name={"contacts." + key}/>
                 </div>
             })}
+            <button className={classes.submitButton} onSubmit={onSubmit}>Save</button>
         </form>
-    </>)
+    </div>)
 }
 
-export default reduxForm({ form: 'profile' })(ProfileDataForm)
+export default reduxForm({ form: 'profile' })(Edit)

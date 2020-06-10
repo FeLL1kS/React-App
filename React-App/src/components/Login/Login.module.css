@@ -15,6 +15,7 @@
 .inputForm {
     margin: 15px 40px;
     text-align: center;
+    width: 300px;
 }
 
 .inputForm input {
@@ -35,10 +36,11 @@
 
 .inputForm input[type="submit"] {
     color: #fff;
+    cursor: pointer;
     font-weight: bold;
     text-transform: uppercase;
     border: none;
-    background: #0fc3f5;
+    background: #6767e0;
     transition: .3s;
 }
 

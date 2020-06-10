@@ -1,0 +1,16 @@
+.settings {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px;
+}
+
+.settings form {
+    display: inherit;
+    flex-direction: column;
+}
+
+.submitButton {
+    align-self: center;
+    margin-top: 10px;
+}

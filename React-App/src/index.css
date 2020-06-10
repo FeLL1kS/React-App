@@ -17,3 +17,11 @@ code {
 #root {
   height: 98vh;
 }
+
+/* Not Final Style */
+input {
+  border-radius: 5px;
+  border: 1px solid;
+  min-width: 200px;
+  padding: 3px 5px;
+}

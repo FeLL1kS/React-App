@@ -8,7 +8,6 @@ import './App.css';
 import Navbar from './components/Navbar/Navbar';
 import News from './components/News/News'
 import Music from './components/Music/Music'
-import Settings from './components/Settings/Settings'
 import UsersContainer from './components/Users/UsersContainer';
 import { Route } from 'react-router-dom';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
@@ -18,6 +17,7 @@ import Login from './components/Login/Login';
 import { connect } from 'react-redux';
 import { initializing } from './redux/appReducer';
 import Preloader from './components/common/preloader/Preloader';
+import EditContainer from './components/Edit/EditContainer';
 
 class App extends React.Component  {
   componentDidMount()
@@ -40,7 +40,7 @@ class App extends React.Component  {
             <Route component={Login} path='/login' />
             <Route component={News} path='/news' />
             <Route component={Music} path='/music' />
-            <Route component={Settings} path='/settings' />
+            <Route component={EditContainer} path='/edit' />
             <Route component={UsersContainer} path='/users' />
           </div>
         </div>

@@ -3,11 +3,7 @@
     border: 1px solid red;
 }
 
-.formControl.error span {
-    margin-left: 5px;
+.formControl.error span, .formError {
     color: red;
-}
-
-.formError {
-    color: red;
+    text-align: center;
 }
