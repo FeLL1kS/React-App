@@ -73,18 +73,41 @@ namespace WebAPI.Controllers
                 Users user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
+                    if(model.Password != model.ConfirmPassword)
+                    {
+                        return new ResultModel<Data>
+                        {
+                            ResultCode = 11,
+                            Messages = "Incorrect password"
+                        };
+                    }
+
                     user = new Users
                     {
                         Email = model.Email,
                         Password = model.Password,
-                        Name = model.Name + ' ' + model.Surname,
-                        LocationId = model.LocationId,
+                        Name = model.Name + ' ' + model.Surname
                     };
+                    if(model.LocationId == 0)
+                    {
+                        user.LocationId = null;
+                    }
+                    else
+                    {
+                        user.LocationId = model.LocationId;
+                    }
 
                     _context.Users.Add(user);
                     await _context.SaveChangesAsync();
 
-                    _context.Contacts.Add(model.Contacts);
+                    if (model.Contacts == null)
+                    {
+                        _context.Contacts.Add(model.Contacts = new Contacts()); 
+                    }
+                    else
+                    {
+                        _context.Contacts.Add(model.Contacts);
+                    }
                     await _context.SaveChangesAsync();
 
                     Profile profile = new Profile
@@ -104,15 +127,14 @@ namespace WebAPI.Controllers
                     {
                         ResultCode = 0,
                         Messages = "Successful registered",
-                        Data = { Email = user.Email, UserId = user.Id }
+                        Data = new Data { Email = user.Email, UserId = user.Id }
                     };
                 }
                 else
                     return new ResultModel<Data>
                     {
                         ResultCode = 1,
-                        Messages = "This e-mail is already in use",
-                        Data = { Email = user.Email }
+                        Messages = "This e-mail is already in use"
                     };
             }
             return new ResultModel<Data>

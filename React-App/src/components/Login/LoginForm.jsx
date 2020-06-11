@@ -7,20 +7,23 @@ import classes from './Login.module.css'
 
 let LoginForm = (props) => {
     return (
-        <form className={classes.loginForm} onSubmit={props.handleSubmit}>
-            <div className={classes.inputForm}>
-                <Field placeholder="Email" component={Input} name="email" type="text" validate={[required]}/>
-            </div>                    
-            <div className={classes.inputForm}>
-                <Field placeholder="Password" component={Input} name="password" type="password" validate={[required]}/>
-            </div>
-            {props.error && <div className={inheritedClasses.formError}>
-                {props.error}
-            </div>}
-            <div className={classes.inputForm}>
-                <Field component={Input} type="submit" name="submit"/>
-            </div>
-        </form>
+        <div className={classes.auth}>
+            <form onSubmit={props.handleSubmit}>
+                <div className={classes.inputForm}>
+                    <Field placeholder="Email" component={Input} name="email" type="text" validate={[required]}/>
+                </div>                    
+                <div className={classes.inputForm}>
+                    <Field placeholder="Password" component={Input} name="password" type="password" validate={[required]}/>
+                </div>
+                {props.error && <div className={inheritedClasses.formError}>
+                    {props.error}
+                </div>}
+                <div className={classes.inputForm}>
+                    <input onClick={props.setRegisterMode} type="submit" name="register" value="Sign up"/>
+                    <input type="submit" name="submit" value="Sign in"/>
+                </div>
+            </form>
+        </div>
     )
 }
 

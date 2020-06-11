@@ -29,6 +29,12 @@ export const authAPI = {
     },
     logout() {
         return instance.delete("auth/logout")
+    },
+    register(registerForm) {
+        return instance.post("auth/register", {...registerForm})
+    },
+    getLocations() {
+        return instance.get("locations").then(response => response.data)
     }
 }
 

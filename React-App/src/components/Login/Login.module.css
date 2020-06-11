@@ -1,15 +1,10 @@
-.login {
-    /* display: flex;
+.auth {
+    display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center; */
-}
-
-.loginForm {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    /* background: rgba(0,0,0,0.7); */
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 .inputForm {
@@ -42,8 +37,30 @@
     border: none;
     background: #6767e0;
     transition: .3s;
+    width: 145px;
+    min-width: 145px;
+}
+
+.inputForm input[type="submit"]:first-child {
+    margin-right: 10px;
 }
 
 .inputForm input[type="submit"]:hover {
     background: #4442db;
+}
+
+.login button {
+    display: block;
+    border: none;
+    background: none;
+    padding: 0 0 30px;
+    text-align: center;
+    color: #000;
+    transition: .3s;
+}
+
+.inputForm select {
+    width: 300px;
+    padding: 10px;
+    font-size: 20px;
 }

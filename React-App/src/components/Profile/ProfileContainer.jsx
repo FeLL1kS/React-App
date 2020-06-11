@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { setProfile, updateStatusText, changeStatus, profileLoaded, savePhoto, saveProfileData } from '../../redux/profileReducer'
 import { withRouter, Redirect } from 'react-router-dom'
 import { compose } from 'redux'
+import Preloader from '../common/preloader/Preloader'
 
 class ProfileContainer extends React.Component {
     
@@ -26,6 +27,8 @@ class ProfileContainer extends React.Component {
         }
         else
         {
+            if(this.props.profile === undefined)
+                return <div className="preloader"><Preloader /></div>
             return <Profile {...this.props} profile={this.props.profile} profileIsLoaded={this.props.profileIsLoaded} saveProfileData={this.props.saveProfileData} />
         }
     }

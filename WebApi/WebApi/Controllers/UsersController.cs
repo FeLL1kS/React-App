@@ -102,5 +102,20 @@ namespace WebAPI.Controllers
 
             return model;
         }
+
+        [HttpDelete("{id}")]
+        public async Task<string> DeleteUser(int id)
+        {
+            Users user = await _context.Users.FindAsync(id);
+            if(user.PhotoId != null) 
+                _context.Photos.Remove(await _context.Photos.FindAsync(user.PhotoId));
+            _context.Users.Remove(user);
+            Profile profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == id);
+            _context.Contacts.Remove(_context.Contacts.Find(profile.ContactsId));
+            _context.Profiles.Remove(profile);
+            _context.Followers.RemoveRange(await _context.Followers.Where(f => f.CurrentUser == id).ToListAsync());
+            await _context.SaveChangesAsync();
+            return "Successfull deleted";
+        }
     }
 }

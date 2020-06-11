@@ -9,7 +9,7 @@ import Navbar from './components/Navbar/Navbar';
 import News from './components/News/News'
 import Music from './components/Music/Music'
 import UsersContainer from './components/Users/UsersContainer';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
@@ -35,6 +35,7 @@ class App extends React.Component  {
           <HeaderContainer />
           <Navbar />
           <div className='app-wraper-content block'>
+            <Route render={ () => <Redirect to='/profile' /> } path='/' />
             <Route render={ () => <ProfileContainer /> } path='/profile/:userId?'/>
             <Route render={ () => <DialogsContainer />} path='/dialogs' />
             <Route component={Login} path='/login' />

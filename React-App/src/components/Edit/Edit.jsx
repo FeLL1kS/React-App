@@ -20,7 +20,7 @@ const Edit = ({profile, handleSubmit, onSubmit, profileIsLoaded}) => {
                 <b>Looking for a job description: </b><Field placeholder="Decsription" component={Input} name="lookingForAJobDescription" validate={[required]}/>
             </div>
 
-            {profile.contacts.instagram && Object.keys(profile.contacts).map(key => {
+            {profile.contacts.instagram !== undefined && Object.keys(profile.contacts).map(key => {
                 return key !== 'id' &&
                 <div key={key}>
                     <b>{key}: </b><Field placeholder={key} component={Input} name={"contacts." + key}/>
