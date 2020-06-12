@@ -8,12 +8,7 @@ const LOADED_PROFILE = 'LOADED-PROFILE'
 const SAVE_PHOTO_SUCCESS = 'SAVE-PHOTO-SUCCESS'
 
 let initialState = {
-    postsData: [
-        { id: '1', message: 'Hello, World!', countLikes: '10' },
-        { id: '2', message: 'First Post!', countLikes: '15'},
-        { id: '3', message: 'Haha', countLikes: '24' },
-        { id: '4', message: 'Hello', countLikes: '43' },
-    ],
+    postsData: [],
     profile: {
         contacts: { }
     },
@@ -25,19 +20,16 @@ const profileReducer = (state = initialState, action) => {
     switch(action.type)
     {
         case ADD_POST:
-            let newPost = {
-                id: '5',
-                message: action.payload,
-                countLikes: '0'
-            }
-            return {
+            console.log(action);
+                return {
                 ...state,
-                postsData: [...state.postsData, newPost],
+                postsData: [...state.postsData, action.payload],
             };
         case SET_USER_PROFILE:
             return {
                 ...state,
-                profile: action.payload
+                profile: action.profile,
+                postsData: action.postsData
             }
         case UPDATE_STATUS_TEXT:
             return {
@@ -60,34 +52,38 @@ const profileReducer = (state = initialState, action) => {
 }
 
 export const addPost = (payload) => ({ type: ADD_POST, payload })
-const setUserProfile = (payload) => ({ type: SET_USER_PROFILE, payload })
+const setUserProfile = (profile, postsData) => ({ type: SET_USER_PROFILE, profile, postsData })
 export const updateStatusText = (payload) => ({ type: UPDATE_STATUS_TEXT, payload })
 export const profileLoaded = (payload) => ({ type: LOADED_PROFILE, payload })
 export const savePhotoSuccess = (payload) => ({ type: SAVE_PHOTO_SUCCESS, payload })
 
-export const getProfile = async (userId) => {
+export const setProfile = (userId) => async (dispatch) => {
+    dispatch(profileLoaded(false))
     let data = await authAPI.me()
     try
     {
-        return profileAPI.profileInfo(userId ? userId : data.data.userId).then(data => data)
+        profileAPI.profileInfo(userId ? userId : data.data.userId).then(profileData => {
+            profileAPI.getPosts(profileData.userId).then(postsData => {
+                dispatch(setUserProfile(profileData, postsData))
+                dispatch(profileLoaded(true))
+            })
+        })
     }
     catch
     {
     }
 }
 
-export const setProfile = (userId) => async (dispatch) => {
-    dispatch(profileLoaded(false))
-    try
-    {
-        getProfile(userId).then(data => {
-            dispatch(setUserProfile(data))
-            dispatch(profileLoaded(true))
+export const addNewPost = (postText) => async (dispatch, getState) => {
+    profileAPI.addPost(getState().auth.userId, postText).then(data => {
+        debugger
+        dispatch(addPost({
+            "id": data.id,
+            "userId": data.userId,
+            "post": data.post,
+            "countLikes": data.countLikes,
+            "postDate": data.postDate}))
         })
-    }
-    catch
-    {
-    }
 }
 
 export const changeStatus = (status) => async (dispatch) => {

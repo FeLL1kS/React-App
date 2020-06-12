@@ -60,5 +60,14 @@ export const profileAPI = {
         return instance.put("profile/", {
             ...profile
         })
+    },
+    getPosts(id) {
+        return instance.get(`posts/${id}`).then(response => response.data)
+    },
+    addPost(id, postText) {
+        return instance.post("posts/", {
+            "userId": id,
+            "Post": postText
+        }).then(response => response.data)
     }
 }

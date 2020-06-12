@@ -1,4 +1,4 @@
-import { addPost } from '../../../redux/profileReducer';
+import { addNewPost } from '../../../redux/profileReducer';
 import MyPost from './MyPosts'
 import { connect } from 'react-redux';
 
@@ -9,7 +9,7 @@ let mapStateToProps = (state) => {
 }
 
 let mapActionToProps = {
-    addPost
+    addNewPost
 }
 
 export default connect(mapStateToProps, mapActionToProps)(MyPost)

@@ -17,5 +17,6 @@ namespace WebAPI.Models
         public DbSet<Contacts> Contacts { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Followers> Followers { get; set; }
+        public DbSet<Posts> Posts { get; set; }
     }
 }

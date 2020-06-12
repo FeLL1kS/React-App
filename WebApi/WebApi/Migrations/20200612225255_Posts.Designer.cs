@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI.Models;
 
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(SNDBContext))]
-    partial class SNDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200612225255_Posts")]
+    partial class Posts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,30 +109,6 @@ namespace WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Photos");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.Posts", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CountLikes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Post")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("PostDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Profile", b =>

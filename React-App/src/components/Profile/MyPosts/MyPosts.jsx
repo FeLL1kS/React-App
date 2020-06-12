@@ -6,7 +6,7 @@ import PostForm from './PostForm';
 const MyPost = (props) => {
 
     let onSubmit = (formData) => {
-        props.addPost(formData.newPostText)
+        props.addNewPost(formData.newPostText)
     }
 
     return (
@@ -16,7 +16,7 @@ const MyPost = (props) => {
                 <PostForm onSubmit={onSubmit}/>
             </div>
             <div>
-                {props.profilePage.postsData.map(post => <Post key={post.id} message={post.message} countLikes={post.countLikes} />)}
+                {props.profilePage.postsData.map(post => <Post key={post.id} message={post.post} countLikes={post.countLikes} />)}
             </div>
         </div>
     )
