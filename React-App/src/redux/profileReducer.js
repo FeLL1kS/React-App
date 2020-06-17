@@ -77,12 +77,7 @@ export const setProfile = (userId) => async (dispatch) => {
 export const addNewPost = (postText) => async (dispatch, getState) => {
     profileAPI.addPost(getState().auth.userId, postText).then(data => {
         debugger
-        dispatch(addPost({
-            "id": data.id,
-            "userId": data.userId,
-            "post": data.post,
-            "countLikes": data.countLikes,
-            "postDate": data.postDate}))
+        dispatch(addPost({...data}))
         })
 }
 

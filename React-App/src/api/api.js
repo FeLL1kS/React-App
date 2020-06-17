@@ -64,10 +64,29 @@ export const profileAPI = {
     getPosts(id) {
         return instance.get(`posts/${id}`).then(response => response.data)
     },
-    addPost(id, postText) {
-        return instance.post("posts/", {
-            "userId": id,
-            "Post": postText
-        }).then(response => response.data)
+    addPost(userId, post) {
+        return instance.post("posts/", { userId, post }).then(response => response.data)
+    }
+}
+
+export const dialogsAPI = {
+    getDialogs(id) {
+        return instance.get(`dialogs/${id}`).then(response => response.data)
+    },
+    getMessages(id) {
+        return instance.get(`dialogs/messages/${id}`).then(response => response.data)
+    },
+    createNewDialog(FromUserId, ToUserId) {
+        return instance.post('dialogs', {
+            "firstUserID": FromUserId,
+            "secondUserID": ToUserId
+        })
+    },
+    newMessage(dialogId, userId, content) {
+        return instance.post('dialogs/messages', {
+            dialogId,
+            userId,
+            content
+        })
     }
 }

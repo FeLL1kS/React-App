@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI.Models;
 
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(SNDBContext))]
-    partial class SNDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200616150502_Dialogs")]
+    partial class Dialogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,8 +135,6 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DialogId");
-
                     b.ToTable("Messages");
                 });
 
@@ -179,8 +179,6 @@ namespace WebAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -245,20 +243,6 @@ namespace WebAPI.Migrations
                     b.HasIndex("PhotoId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.Message", b =>
-                {
-                    b.HasOne("WebAPI.Models.Dialog", "Dialog")
-                        .WithMany()
-                        .HasForeignKey("DialogId");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.Posts", b =>
-                {
-                    b.HasOne("WebAPI.Models.Users", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Profile", b =>

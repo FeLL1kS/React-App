@@ -1,6 +1,8 @@
 import avatar from '../img/avatar.jpg'
+import { dialogsAPI } from '../api/api'
 
 const SEND_MESSAGE = 'SEND-MESSAGE'
+const SET_DIALOGS = 'SET-DIALOGS'
 
 let initialState = {
     dialogsData: [
@@ -21,7 +23,7 @@ const dialogsReducers = (state = initialState, action) => {
     
     switch(action.type)
     {
-        case(SEND_MESSAGE):
+        case SEND_MESSAGE:
             let newMessage = {
                 id: '5',
                 message: action.payload,
@@ -33,11 +35,26 @@ const dialogsReducers = (state = initialState, action) => {
                 ...state,
                 messagesData: [...state.messagesData, newMessage],
             }
+        case SET_DIALOGS:
+            return {
+                ...state,
+                dialogsData: action.dialogsData
+            }
         default:
             return state
     }
 }
 
 export const sendMessage = (payload) => ({ type: SEND_MESSAGE, payload })
+const setDialogs = (dialogsData) => ({ type: SET_DIALOGS, dialogsData })
+
+export const getDialogs = (userId) => async (dispatch) => {
+    let data = await dialogsAPI.getDialogs(userId)
+    
+    if(data.resultCode === 0)
+    {
+        dispatch(setDialogs(data.data))
+    }
+}
 
 export default dialogsReducers

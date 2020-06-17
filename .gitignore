@@ -2,6 +2,7 @@
 
 # dependencies
 /Files
+/Migrations
 /node_modules
 /.pnp
 .pnp.js

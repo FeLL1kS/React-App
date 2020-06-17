@@ -5,7 +5,6 @@ import Message from './Message/Message'
 import { Field, reduxForm } from 'redux-form'
 
 const Dialogs = (props) => {
-    
     const onSubmit = (formData) => {
         props.sendMessage(formData.newMessageText)
     }
@@ -14,7 +13,7 @@ const Dialogs = (props) => {
         <div className={classes.dialogs}>
             <div className={classes.dialogs__items}>
                 <span className={classes.header}>DIALOGS</span>
-                {props.dialogsPage.dialogsData.map(dialog => <DialogItem key={dialog.id} name={dialog.name} id={dialog.id} avatar={dialog.avatar.avatar} />)}
+                {props.dialogsPage.dialogsData.map(dialog => <DialogItem key={dialog.id} name={dialog.name} id={dialog.id} avatar={dialog.avatar} />)}
             </div>
             <span className={classes.border}></span>
             <div className={classes.messages}>

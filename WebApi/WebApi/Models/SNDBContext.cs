@@ -18,5 +18,7 @@ namespace WebAPI.Models
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Followers> Followers { get; set; }
         public DbSet<Posts> Posts { get; set; }
+        public DbSet<Dialog> Dialogs { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }
