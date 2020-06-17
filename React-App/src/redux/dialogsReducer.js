@@ -1,22 +1,15 @@
-import avatar from '../img/avatar.jpg'
-import { dialogsAPI } from '../api/api'
+import { dialogsAPI, usersAPI } from '../api/api'
 
 const SEND_MESSAGE = 'SEND-MESSAGE'
-const SET_DIALOGS = 'SET-DIALOGS'
+const GET_DIALOGS = 'GET-DIALOGS'
+const SET_DIALOG_ID = 'SET-DIALOG-ID'
+const FILL_MESSAGES_DATA = 'FILL-MESSAGES-DATA'
+const ADD_NEW_DIALOG = 'ADD-NEW-DIALOG'
 
 let initialState = {
-    dialogsData: [
-        { id: '1', name: 'Oleg Vojtovich', avatar: { avatar } },
-        { id: '2', name: 'Dima Vojtovich', avatar: { avatar } },
-        { id: '3', name: 'Mariya Vojtovich', avatar: { avatar } },
-        { id: '4', name: 'Valentine Vojtovich', avatar: { avatar } },
-    ],
-    messagesData: [
-        { id: '1', message: 'Hi', from: 'im', name: 'Oleg Vojtovich', avatar: {avatar} },
-        { id: '2', message: 'How are you?', from: 'im', name: 'Oleg Vojtovich', avatar: {avatar} },
-        { id: '3', message: 'I\'m fine, and you?', from: 'comp', name: 'Dima Vojtovich', avatar: {avatar} },
-        { id: '4', message: 'Me too', from: 'im', name: 'Oleg Vojtovich', avatar: {avatar} },
-    ],
+    dialogsData: [],
+    currentDialogId: null,
+    messagesData: []
 }
 
 const dialogsReducers = (state = initialState, action) => {
@@ -24,36 +17,95 @@ const dialogsReducers = (state = initialState, action) => {
     switch(action.type)
     {
         case SEND_MESSAGE:
-            let newMessage = {
-                id: '5',
-                message: action.payload,
-                from: 'im',
-                name: "Oleg Vojtovich",
-                avatar: {avatar}
-            }
             return {
                 ...state,
-                messagesData: [...state.messagesData, newMessage],
+                messagesData: [...state.messagesData, action.payload],
             }
-        case SET_DIALOGS:
+        case GET_DIALOGS:
             return {
                 ...state,
                 dialogsData: action.dialogsData
+            }
+        case SET_DIALOG_ID:
+            return {
+                ...state,
+                currentDialogId: action.dialogId
+            }
+        case FILL_MESSAGES_DATA:
+            return {
+                ...state,
+                messagesData: action.messagesData
+            }
+        case ADD_NEW_DIALOG:
+            return {
+                ...state,
+                dialogsData: [...state.dialogsData, action.payload]
             }
         default:
             return state
     }
 }
 
-export const sendMessage = (payload) => ({ type: SEND_MESSAGE, payload })
-const setDialogs = (dialogsData) => ({ type: SET_DIALOGS, dialogsData })
+const successSendMessage = (payload) => ({ type: SEND_MESSAGE, payload })
+const getUserDialogs = (dialogsData) => ({ type: GET_DIALOGS, dialogsData })
+const setCurrentDialogId = (dialogId) => ({ type: SET_DIALOG_ID, dialogId })
+const fillMessagesData = (messagesData) => ({ type: FILL_MESSAGES_DATA, messagesData })
+const addNewDialog = (payload) => ({ type: ADD_NEW_DIALOG, payload })
 
 export const getDialogs = (userId) => async (dispatch) => {
     let data = await dialogsAPI.getDialogs(userId)
     
     if(data.resultCode === 0)
     {
-        dispatch(setDialogs(data.data))
+        dispatch(getUserDialogs(data.data))
+    }
+}
+
+export const setDialog = (dialogId) => async (dispatch, getState) => {
+    if(dialogId === undefined)
+    {
+        dispatch(setCurrentDialogId(null))
+        return
+    }
+    
+    let data = await dialogsAPI.getMessages(dialogId)
+
+    if(data.resultCode === 0)
+    {
+        dispatch(setCurrentDialogId(dialogId))
+        dispatch(fillMessagesData(data.data))
+    }
+    if(data.resultCode === 1)
+    {
+        dispatch(setCurrentDialogId(dialogId))
+        dispatch(fillMessagesData([]))
+        let userData = await usersAPI.getUser(dialogId)
+        
+        if(getState().dialogsPage.dialogsData.filter(d => parseInt(d.id) === parseInt(dialogId)).length === 0)
+            dispatch(addNewDialog({
+                id: userData.id,
+                name: userData.name,
+                avatar: userData.photo
+            }))
+    }
+}
+
+export const sendMessage = (dialogId, message) => async (dispatch, getState) => {
+    let data = await dialogsAPI.newMessage(dialogId, getState().auth.userId, message)
+    if(data.resultCode === 0)
+    {
+        dispatch(successSendMessage({
+            id: getState().auth.userId,
+            message: message,
+            from: 'im',
+            name: getState().auth.name,
+            avatar: getState().auth.photo
+        }))
+    }
+    if(data.resultCode === 10)
+    {
+        dialogsAPI.createNewDialog(getState().auth.userId, dialogId)
+        dispatch(sendMessage(dialogId, message))
     }
 }
 

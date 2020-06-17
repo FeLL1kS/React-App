@@ -6,6 +6,7 @@
 
 .dialogs__items {
     margin: 10px 30px 30px 30px;
+    min-width: 200px;
 }
 
 .border {
@@ -17,6 +18,7 @@
 
 .messages {
     padding: 31.6px 30px 30px 30px;
+    min-height: 250px;
 }
 
 .header {
@@ -32,4 +34,10 @@
 .messageBox button {
     float: right;
     width: 100px;
+}
+
+.select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

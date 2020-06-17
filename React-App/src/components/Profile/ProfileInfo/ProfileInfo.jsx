@@ -35,7 +35,7 @@ let ProfileInfo = (props) => {
                                     </>}
                         <img src={props.profile.photo !== null ? props.profile.photo : user} alt={'avatar'}/>
                     </div>
-                    <ProfileData profile={props.profile} updateStatusText={props.updateStatusText} changeStatus={props.changeStatus} isOwner={isOwner}/>
+                    <ProfileData userId={props.profile.userId} profile={props.profile} updateStatusText={props.updateStatusText} changeStatus={props.changeStatus} isOwner={isOwner}/>
                     </>
                 }
             </div>
@@ -43,10 +43,11 @@ let ProfileInfo = (props) => {
     )
 }
 
-const ProfileData = ({profile, updateStatusText, changeStatus, isOwner, goToEditMode}) => {
+const ProfileData = ({profile, updateStatusText, changeStatus, isOwner, userId}) => {
     return  (
     <>
         {isOwner && <NavLink to='edit'>Edit</NavLink>}
+        {!isOwner && <NavLink to={`../dialogs/${userId}`}>Написать</NavLink>}
         <div className={classes.mainInfo}>
             <ul>
                 <li><div>{profile.fullName}</div></li>

@@ -35,9 +35,9 @@ class App extends React.Component  {
           <HeaderContainer />
           <Navbar />
           <div className='app-wraper-content block'>
-            <Route render={ () => <Redirect to='/profile' /> } path='/' />
+            <Route render={ () => <Redirect to='/profile' /> } exact={true} path='/' />
             <Route render={ () => <ProfileContainer /> } path='/profile/:userId?'/>
-            <Route render={ () => <DialogsContainer />} path='/dialogs' />
+            <Route render={ () => <DialogsContainer />} path='/dialogs/:dialogId?' />
             <Route component={Login} path='/login' />
             <Route component={News} path='/news' />
             <Route component={Music} path='/music' />

@@ -30,14 +30,12 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<UserList>> GetUsers([FromQuery]PagingParameterModel pagingParameterModel)
         {
-            List<Users> users = await _context.Users.ToListAsync();
+            List<Users> users = await _context.Users.Include(l => l.Location).Include(p => p.Photo).ToListAsync();
             List<Users> items = users.Skip((pagingParameterModel.PageNumber - 1) * pagingParameterModel.PageSize).Take(pagingParameterModel.PageSize).ToList();
             List<UserModel> models = new List<UserModel>();
 
             foreach (Users user in items)
             {
-                user.Location = await _context.Locations.FindAsync(user.LocationId);
-                user.Photo = await _context.Photos.FindAsync(user.PhotoId);
                 UserModel model = new UserModel
                 {
                     Id = user.Id,
@@ -77,9 +75,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserModel>> GetUsers(int id)
         {
-            Users user = await _context.Users.FindAsync(id);
-            user.Location = await _context.Locations.FindAsync(user.LocationId);
-            user.Photo = await _context.Photos.FindAsync(user.PhotoId);
+            Users user = await _context.Users.Include(l => l.Location).Include(p => p.Photo).FirstOrDefaultAsync(u => u.Id == id);
 
             UserModel model = new UserModel
             {

@@ -8,6 +8,9 @@ const instance = axios.create({
 export const usersAPI = {
     getUsers(pageSize, currentPage) {
         return instance.get("users?pageSize=" + pageSize + "&pageNumber=" + currentPage).then(response => response.data)
+    },
+    getUser(userId) {
+        return instance.get(`users/${userId}`).then(response => response.data)
     }
 }
 
@@ -87,6 +90,6 @@ export const dialogsAPI = {
             dialogId,
             userId,
             content
-        })
+        }).then(response => response.data)
     }
 }

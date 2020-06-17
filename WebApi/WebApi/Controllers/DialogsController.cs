@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using WebAPI.ViewModel;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DialogsController : ControllerBase
@@ -21,7 +23,7 @@ namespace WebAPI.Controllers
             _context = context;
         }
 
-        public class Data
+        public class DialogsData
         {
             public int Id { get; set; }
             public string Name { get; set; }
@@ -29,9 +31,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResultModel<List<Data>>>> GetDialogs(int id)
+        public async Task<ActionResult<ResultModel<List<DialogsData>>>> GetDialogs(int id)
         {
-            List<Data> datas = new List<Data>();
+            List<DialogsData> datas = new List<DialogsData>();
             List<Dialog> dialogs = await _context.Dialogs.Where(d => d.firstUserID == id || d.secondUserID == id).ToListAsync();
 
             foreach (Dialog dialog in dialogs)
@@ -39,16 +41,43 @@ namespace WebAPI.Controllers
                 int userId = id == dialog.firstUserID ? dialog.secondUserID : dialog.firstUserID;
                 Users user = await _context.Users.FindAsync(userId);
                 user.Photo = await _context.Photos.FindAsync(user.PhotoId);
-                datas.Add(new Data { Id = dialog.Id, Name = user.Name, Avatar = user.Photo.FilePath });
+                datas.Add(new DialogsData { Id = user.Id, Name = user.Name, Avatar = user.Photo.FilePath });
             }
 
-            return new ResultModel<List<Data>> { ResultCode = 0, Data = datas };
+            return new ResultModel<List<DialogsData>> { ResultCode = 0, Data = datas };
+        }
+
+        public class MessagesData
+        {
+            public int Id { get; set; }
+            public string Message { get; set; }
+            public string From { get; set; }
+            public string Name { get; set; }
+            public string Avatar { get; set; }
         }
 
         [HttpGet("messages/{id}")]
-        public async Task<ActionResult<List<Message>>> GetMessages(int id)
+        public async Task<ActionResult<ResultModel<List<MessagesData>>>> GetMessages(int id)
         {
-            return await _context.Messages.Where(m => m.DialogId == id).ToListAsync();
+            Dialog dialog = await _context.Dialogs.Where(d => d.firstUserID == id && d.secondUserID.ToString() == User.Identity.Name || d.secondUserID == id && d.firstUserID.ToString() == User.Identity.Name || d.firstUserID == id && d.secondUserID == id).FirstOrDefaultAsync();
+            if (dialog == null)
+                return new ResultModel<List<MessagesData>> { ResultCode = 1, Messages = "This dialog does not exist" };
+            List<Message> messages = await _context.Messages.Where(m => m.DialogId == dialog.Id).ToListAsync();
+            List<MessagesData> datas = new List<MessagesData>();
+            foreach (Message message in messages)
+            {
+                Users user = await _context.Users.Include(p => p.Photo).FirstOrDefaultAsync(u => u.Id == message.UserId);
+                datas.Add(new MessagesData
+                {
+                    Id = message.Id,
+                    Message = message.Content,
+                    From = User.Identity.Name == message.UserId.ToString() ? "im" : "comp",
+                    Name = user.Name,
+                    Avatar = user.Photo.FilePath
+                });
+            }
+
+            return new ResultModel<List<MessagesData>> { ResultCode = 0, Data = datas };
         }
 
         [HttpPost]
@@ -65,16 +94,20 @@ namespace WebAPI.Controllers
 
 
         [HttpPost("messages")]
-        public async Task<ActionResult<Message>> PostNewMessage(Message message)
+        public async Task<ActionResult<ResultModel<string>>> PostNewMessage(Message message)
         {
-            message.Dialog = await _context.Dialogs.FindAsync(message.DialogId);
+                message.Dialog = await _context.Dialogs.Where(d => d.firstUserID == message.DialogId && d.secondUserID == message.UserId || d.firstUserID == message.UserId && d.secondUserID == message.DialogId).FirstOrDefaultAsync();
+            
+            if(message.Dialog == null)
+                return new ResultModel<string> { ResultCode = 10, Messages = "Dialog does not exist" };
+
             if (message.UserId != message.Dialog.firstUserID && message.UserId != message.Dialog.secondUserID)
-                return NotFound();
+                return new ResultModel<string> { ResultCode = 1, Messages = "Wrong user" };
 
             message.DateCreated = DateTime.Now;
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
-            return message;
+            return new ResultModel<string> { ResultCode = 0, Data = message.Content };
         }
     }
 }

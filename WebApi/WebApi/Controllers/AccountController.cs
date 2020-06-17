@@ -30,6 +30,7 @@ namespace WebAPI.Controllers
         {
             public int UserId { get; set; }
             public string Email { get; set; }
+            public string Name { get; set; }
         }
 
         [AllowAnonymous]
@@ -39,7 +40,7 @@ namespace WebAPI.Controllers
             if(User.Identity.IsAuthenticated)
             {
                 Users user = await _context.Users.FindAsync(Int32.Parse(User.Identity.Name));
-                return new ResultModel<Data> { ResultCode = 0, Data = new Data { UserId = Int32.Parse(User.Identity.Name), Email = user.Email }};
+                return new ResultModel<Data> { ResultCode = 0, Data = new Data { UserId = Int32.Parse(User.Identity.Name), Email = user.Email, Name = user.Name }};
             }
             else
             {
