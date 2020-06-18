@@ -19,12 +19,19 @@
 .messages {
     padding: 31.6px 30px 30px 30px;
     min-height: 250px;
+    height: 69vh;
+    overflow: auto;
+
 }
 
 .header {
     display: block;
     width: 100%;
     text-align: center;
+}
+
+.messageBox {
+    padding: 0 30px 30px 30px;
 }
 
 .messageBox textarea {
